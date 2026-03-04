@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ST CONNECTOR PRO - Конструктор стеллажей</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .header h1 span {
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 18px;
+        }
+
+        .main-content {
+            display: flex;
+            padding: 30px;
+            gap: 30px;
+            background: #f0f4f8;
+        }
+
+        /* Левая панель - управление */
+        .left-panel {
+            flex: 1.2;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2a5298;
+            font-weight: 600;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: #ffd700;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: #2a5298;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(42,82,152,0.1);
+        }
+
+        /* Секции */
+        .sections-container {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8fafd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .section-item:hover {
+            border-color: #2a5298;
+            transform: translateX(5px);
+        }
+
+        .section-item .section-number {
+            width: 30px;
+            height: 30px;
+            background: #2a5298;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .section-item input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-section-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .add-section-btn:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        /* Соединители */
+        .connectors-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .connector-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .connector-card:hover {
+            border-color: #2a5298;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .connector-card.selected {
+            border-color: #2a5298;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%);
+        }
+
+        .connector-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .connector-icon {
+            width: 40px;
+            height: 40px;
+            background: #2a5298;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .connector-title {
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        .connector-desc {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .connector-price {
+            font-weight: 700;
+            color: #27ae60;
+            font-size: 18px;
+        }
+
+        .connector-price small {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .connector-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffd700;
+            color: #1e3c72;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .connector-image {
+            width: 60px;
+            height: 60px;
+            background: #f0f4f8;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Правая панель */
+        .right-panel {
+            flex: 1.8;
+        }
+
+        .preview-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .canvas-container {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border: 3px solid white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: white;
+        }
+
+        /* Легенда соединителей */
+        .legend-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8fafd;
+            border-radius: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        .st1 { background: #e74c3c; }
+        .st2 { background: #3498db; }
+        .st3 { background: #2ecc71; }
+        .st4 { background: #f39c12; }
+        .st5 { background: #9b59b6; }
+
+        /* Результаты */
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .results-table td {
+            padding: 12px 0;
+        }
+
+        .results-table td:last-child {
+            text-align: right;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        .total-cost {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-cost .amount {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .total-cost .currency {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            color: #1e3c72;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ST<span> CONNECTOR</span> PRO</h1>
+            <p>Профессиональный конструктор стеллажных систем с соединителями нового поколения</p>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="section-title">
+                    <i>📐</i> Габаритные размеры
+                </div>
+
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Общая ширина (мм)</label>
+                        <input type="number" id="totalWidth" value="2000" min="1000" max="6000" step="10">
+                    </div>
+                    <div class="input-group">
+                        <label>Общая глубина (мм)</label>
+                        <input type="number" id="totalDepth" value="600" min="300" max="2000" step="10">
+                    </div>
+                    <div class="input-group">
+                        <label>Общая высота (мм)</label>
+                        <input type="number" id="totalHeight" value="2400" min="1000" max="4000" step="10">
+                    </div>
+                    <div class="input-group">
+                        <label>Профиль трубы</label>
+                        <select id="profileTube">
+                            <option value="20x20">20x20 мм (1.5 мм)</option>
+                            <option value="25x25">25x25 мм (2 мм)</option>
+                            <option value="30x30" selected>30x30 мм (2 мм)</option>
+                            <option value="40x40">40x40 мм (2.5 мм)</option>
+                            <option value="50x50">50x50 мм (3 мм)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i>🏗️</i> Секции стеллажа
+                </div>
+
+                <div id="sectionsList" class="sections-container">
+                    <!-- Секции будут добавляться сюда динамически -->
+                </div>
+
+                <button class="add-section-btn" onclick="addSection()">
+                    + Добавить секцию
+                </button>
+
+                <div class="section-title">
+                    <i>🔩</i> Соединители ST
+                </div>
+
+                <div class="connectors-grid">
+                    <div class="connector-card selected" data-connector="st1" onclick="selectConnector('st1')">
+                        <div class="connector-badge">Осевой</div>
+                        <div class="connector-header">
+                            <div class="connector-icon">ST-1</div>
+                            <div>
+                                <div class="connector-title">Крестообразный</div>
+                                <div class="connector-desc">4-стороннее соединение</div>
+                            </div>
+                        </div>
+                        <div class="connector-image">✝️</div>
+                        <div class="connector-price">850 ₽ <small>/шт</small></div>
+                    </div>
+
+                    <div class="connector-card" data-connector="st2" onclick="selectConnector('st2')">
+                        <div class="connector-badge">Осевой</div>
+                        <div class="connector-header">
+                            <div class="connector-icon">ST-2</div>
+                            <div>
+                                <div class="connector-title">Т-образный</div>
+                                <div class="connector-desc">Серединное крепление</div>
+                            </div>
+                        </div>
+                        <div class="connector-image">├─</div>
+                        <div class="connector-price">720 ₽ <small>/шт</small></div>
+                    </div>
+
+                    <div class="connector-card" data-connector="st3" onclick="selectConnector('st3')">
+                        <div class="connector-badge">Лучевой</div>
+                        <div class="connector-header">
+                            <div class="connector-icon">ST-3</div>
+                            <div>
+                                <div class="connector-title">Прямое лучевое</div>
+                                <div class="connector-desc">Разветвление</div>
+                            </div>
+                        </div>
+                        <div class="connector-image">↗️</div>
+                        <div class="connector-price">690 ₽ <small>/шт</small></div>
+                    </div>
+
+                    <div class="connector-card" data-connector="st4" onclick="selectConnector('st4')">
+                        <div class="connector-badge">Осевой</div>
+                        <div class="connector-header">
+                            <div class="connector-icon">ST-4</div>
+                            <div>
+                                <div class="connector-title">Угловой</div>
+                                <div class="connector-desc">С осевой опорой</div>
+                            </div>
+                        </div>
+                        <div class="connector-image">└─</div>
+                        <div class="connector-price">780 ₽ <small>/шт</small></div>
+                    </div>
+
+                    <div class="connector-card" data-connector="st5" onclick="selectConnector('st5')">
+                        <div class="connector-badge">Осевой</div>
+                        <div class="connector-header">
+                            <div class="connector-icon">ST-5</div>
+                            <div>
+                                <div class="connector-title">Т-образный</div>
+                                <div class="connector-desc">Разветвитель осевой</div>
+                            </div>
+                        </div>
+                        <div class="connector-image">┬─</div>
+                        <div class="connector-price">750 ₽ <small>/шт</small></div>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <i>⚙️</i> Материал профиля
+                </div>
+
+                <select id="materialType" style="width: 100%; padding: 12px; border-radius: 10px; margin-bottom: 20px;">
+                    <option value="steel">Сталь обычная - 280 ₽/кг</option>
+                    <option value="galvanized">Оцинкованная сталь - 350 ₽/кг</option>
+                    <option value="stainless">Нержавеющая сталь - 480 ₽/кг</option>
+                </select>
+
+                <button class="btn-calculate" onclick="calculateAndDraw()">
+                    🔄 РАССЧИТАТЬ И ОБНОВИТЬ ЧЕРТЕЖ
+                </button>
+            </div>
+
+            <div class="right-panel">
+                <div class="preview-section">
+                    <div class="canvas-container">
+                        <canvas id="shelfCanvas" width="600" height="500"></canvas>
+                    </div>
+
+                    <div class="legend-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3 style="color: #1e3c72;">Условные обозначения</h3>
+                            <div style="color: #2a5298;">Осевые трубы выделены жирным</div>
+                        </div>
+                        <div class="legend-grid">
+                            <div class="legend-item"><span class="legend-color st1"></span> ST-1: Крестообразный</div>
+                            <div class="legend-item"><span class="legend-color st2"></span> ST-2: Т-образный</div>
+                            <div class="legend-item"><span class="legend-color st3"></span> ST-3: Лучевой</div>
+                            <div class="legend-item"><span class="legend-color st4"></span> ST-4: Угловой</div>
+                            <div class="legend-item"><span class="legend-color st5"></span> ST-5: Т-разветвитель</div>
+                            <div class="legend-item"><span style="background: black; width: 20px; height: 20px; border-radius: 5px;"></span> Осевая труба</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <h3 style="color: #1e3c72; margin-bottom: 20px;">📊 Спецификация материалов</h3>
+                    
+                    <table class="results-table">
+                        <tr>
+                            <td>Осевые трубы (вертикальные):</td>
+                            <td id="axialVerticalLength">0 м</td>
+                        </tr>
+                        <tr>
+                            <td>Осевые трубы (горизонтальные):</td>
+                            <td id="axialHorizontalLength">0 м</td>
+                        </tr>
+                        <tr>
+                            <td>Соединительные трубы (полки):</td>
+                            <td id="connectorTubesLength">0 м</td>
+                        </tr>
+                        <tr>
+                            <td>Всего профильной трубы:</td>
+                            <td id="totalTubeLength">0 м</td>
+                        </tr>
+                        <tr>
+                            <td>Вес конструкции:</td>
+                            <td id="totalWeight">0 кг</td>
+                        </tr>
+                    </table>
+
+                    <table class="results-table" style="margin-top: 20px;">
+                        <tr style="background: #f0f7ff;">
+                            <td colspan="2" style="padding: 15px 0; font-weight: 700; color: #1e3c72;">Соединители ST:</td>
+                        </tr>
+                        <tr>
+                            <td>ST-1 (Крестообразные):</td>
+                            <td id="st1Count">0 шт</td>
+                        </tr>
+                        <tr>
+                            <td>ST-2 (Т-образные серединные):</td>
+                            <td id="st2Count">0 шт</td>
+                        </tr>
+                        <tr>
+                            <td>ST-3 (Лучевые):</td>
+                            <td id="st3Count">0 шт</td>
+                        </tr>
+                        <tr>
+                            <td>ST-4 (Угловые):</td>
+                            <td id="st4Count">0 шт</td>
+                        </tr>
+                        <tr>
+                            <td>ST-5 (Т-разветвители):</td>
+                            <td id="st5Count">0 шт</td>
+                        </tr>
+                    </table>
+
+                    <div class="total-cost">
+                        <div>
+                            <div style="font-size: 14px; opacity: 0.9;">ИТОГОВАЯ СТОИМОСТЬ</div>
+                            <div style="font-size: 24px; font-weight: 700;">с учетом всех материалов</div>
+                        </div>
+                        <div>
+                            <span class="amount" id="totalCost">0</span>
+                            <span class="currency">₽</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные о соединителях
+        const connectors = {
+            st1: { name: 'ST-1', price: 850, color: '#e74c3c', type: 'крестообразный' },
+            st2: { name: 'ST-2', price: 720, color: '#3498db', type: 'т-образный серединный' },
+            st3: { name: 'ST-3', price: 690, color: '#2ecc71', type: 'лучевой' },
+            st4: { name: 'ST-4', price: 780, color: '#f39c12', type: 'угловой' },
+            st5: { name: 'ST-5', price: 750, color: '#9b59b6', type: 'т-образный разветвитель' }
+        };
+
+        // Вес профиля в кг/м
+        const profileWeights = {
+            '20x20': 0.92,
+            '25x25': 1.35,
+            '30x30': 1.78,
+            '40x40': 2.58,
+            '50x50': 3.55
+        };
+
+        // Цены материалов за кг
+        const materialPrices = {
+            steel: 280,
+            galvanized: 350,
+            stainless: 480
+        };
+
+        let sections = [];
+        let selectedConnector = 'st1';
+
+        // Функция добавления секции
+        function addSection() {
+            sections.push({
+                number: sections.length + 1,
+                height: 800,
+                type: 'shelf',
+                count: 1
+            });
+            renderSections();
+        }
+
+        // Функция удаления секции
+        function removeSection(index) {
+            sections.splice(index, 1);
+            // Перенумеровываем секции
+            sections.forEach((s, i) => s.number = i + 1);
+            renderSections();
+        }
+
+        // Функция обновления секции
+        function updateSection(index, field, value) {
+            if (field === 'height') {
+                sections[index][field] = parseInt(value) || 800;
+            } else {
+                sections[index][field] = value;
+            }
+        }
+
+        // Функция отрисовки списка секций
+        function renderSections() {
+            const container = document.getElementById('sectionsList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            sections.forEach((section, index) => {
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'section-item';
+                sectionEl.innerHTML = `
+                    <div class="section-number">${index + 1}</div>
+                    <select onchange="updateSection(${index}, 'type', this.value)" style="width: 100px;">
+                        <option value="shelf" ${section.type === 'shelf' ? 'selected' : ''}>Полка</option>
+                        <option value="box" ${section.type === 'box' ? 'selected' : ''}>Ящик</option>
+                        <option value="rod" ${section.type === 'rod' ? 'selected' : ''}>Штанга</option>
+                    </select>
+                    <input type="number" value="${section.height}" onchange="updateSection(${index}, 'height', this.value)" min="200" max="2000" step="10">
+                    <span style="margin-left: auto;">мм</span>
+                    <button onclick="removeSection(${index})" style="background: #e74c3c; color: white; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer;">✕</button>
+                `;
+                container.appendChild(sectionEl);
+            });
+        }
+
+        // Функция выбора соединителя
+        function selectConnector(connectorId) {
+            selectedConnector = connectorId;
+            document.querySelectorAll('.connector-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            const selectedCard = document.querySelector(`[data-connector="${connectorId}"]`);
+            if (selectedCard) selectedCard.classList.add('selected');
+        }
+
+        // Функция расчета и рисования
+        function calculateAndDraw() {
+            const totalWidth = parseInt(document.getElementById('totalWidth')?.value) || 2000;
+            const totalDepth = parseInt(document.getElementById('totalDepth')?.value) || 600;
+            const totalHeight = parseInt(document.getElementById('totalHeight')?.value) || 2400;
+            const profileTube = document.getElementById('profileTube')?.value || '30x30';
+            const materialType = document.getElementById('materialType')?.value || 'steel';
+
+            // Расчет осевых труб (вертикальные стойки)
+            const verticalPosts = 4;
+            const verticalAxialLength = (totalHeight / 1000) * verticalPosts;
+
+            // Горизонтальные осевые трубы (верх и низ)
+            const horizontalAxialLength = (2 * (totalWidth + totalDepth) / 1000) * 2;
+
+            // Трубы для полок (соединительные)
+            let shelfTubesLength = 0;
+            sections.forEach(section => {
+                if (section.type === 'shelf') {
+                    shelfTubesLength += (2 * (totalWidth + totalDepth) / 1000) * section.count;
+                }
+            });
+
+            const totalTubeLength = verticalAxialLength + horizontalAxialLength + shelfTubesLength;
+
+            // Расчет соединителей
+            const st1Count = 4; // угловые соединения
+            const st2Count = sections.length * 2;
+            const st3Count = sections.filter(s => s.type === 'rod').length * 4;
+            const st4Count = 4;
+            const st5Count = sections.length * 2;
+
+            // Расчет веса
+            const profileWeight = profileWeights[profileTube] || 1.78;
+            const totalWeight = (totalTubeLength * profileWeight).toFixed(1);
+
+            // Расчет стоимости материалов
+            const materialPrice = materialPrices[materialType] || 280;
+            const tubeCost = totalTubeLength * profileWeight * materialPrice;
+
+            // Расчет стоимости соединителей
+            const connectorsCost = 
+                st1Count * (connectors.st1?.price || 850) +
+                st2Count * (connectors.st2?.price || 720) +
+                st3Count * (connectors.st3?.price || 690) +
+                st4Count * (connectors.st4?.price || 780) +
+                st5Count * (connectors.st5?.price || 750);
+
+            const totalCost = Math.round(tubeCost + connectorsCost);
+
+            // Обновление отображения
+            document.getElementById('axialVerticalLength').textContent = verticalAxialLength.toFixed(1) + ' м';
+            document.getElementById('axialHorizontalLength').textContent = horizontalAxialLength.toFixed(1) + ' м';
+            document.getElementById('connectorTubesLength').textContent = shelfTubesLength.toFixed(1) + ' м';
+            document.getElementById('totalTubeLength').textContent = totalTubeLength.toFixed(1) + ' м';
+            document.getElementById('totalWeight').textContent = totalWeight + ' кг';
+            
+            document.getElementById('st1Count').textContent = st1Count + ' шт';
+            document.getElementById('st2Count').textContent = st2Count + ' шт';
+            document.getElementById('st3Count').textContent = st3Count + ' шт';
+            document.getElementById('st4Count').textContent = st4Count + ' шт';
+            document.getElementById('st5Count').textContent = st5Count + ' шт';
+            
+            document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
+
+            // Рисуем чертеж
+            drawShelf(totalWidth, totalDepth, totalHeight, sections, profileTube);
+        }
+
+        // Функция отрисовки чертежа
+        function drawShelf(width, depth, height, sections, profileTube) {
+            const canvas = document.getElementById('shelfCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Защита от некорректных размеров
+            if (width <= 0 || height <= 0 || depth <= 0) return;
+
+            const scale = Math.min(
+                (canvas.width - 150) / Math.max(width, depth + 100, 1),
+                (canvas.height - 150) / Math.max(height + 100, 1)
+            ) * 0.8;
+
+            const offsetX = 100;
+            const offsetY = 100;
+
+            if (scale <= 0) return;
+
+            // Рисуем осевые трубы (жирными линиями)
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'black';
+
+            // Левая передняя осевая труба
+            ctx.beginPath();
+            ctx.moveTo(offsetX, offsetY);
+            ctx.lineTo(offsetX, offsetY + height * scale);
+            ctx.stroke();
+
+            // Правая передняя осевая труба
+            ctx.beginPath();
+            ctx.moveTo(offsetX + width * scale, offsetY);
+            ctx.lineTo(offsetX + width * scale, offsetY + height * scale);
+            ctx.stroke();
+
+            // Левая задняя осевая труба (со смещением для перспективы)
+            ctx.beginPath();
+            ctx.moveTo(offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3);
+            ctx.lineTo(offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
+            ctx.stroke();
+
+            // Правая задняя осевая труба
+            ctx.beginPath();
+            ctx.moveTo(offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3);
+            ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
+            ctx.stroke();
+
+            // Вспомогательная функция для рисования соединителя
+            function drawConnector(ctx, x, y, type, size) {
+                ctx.fillStyle = connectors[type]?.color || '#999';
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
+
+            const connectorSize = 8;
+
+            // ST-1 (Крестообразные) - верхние углы
+            if (connectors.st1) {
+                ctx.fillStyle = connectors.st1.color;
+                drawConnector(ctx, offsetX, offsetY, 'st1', connectorSize);
+                drawConnector(ctx, offsetX + width * scale, offsetY, 'st1', connectorSize);
+                drawConnector(ctx, offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3, 'st1', connectorSize);
+                drawConnector(ctx, offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3, 'st1', connectorSize);
+            }
+
+            // ST-4 (Угловые) - нижние углы
+            if (connectors.st4) {
+                ctx.fillStyle = connectors.st4.color;
+                drawConnector(ctx, offsetX, offsetY + height * scale, 'st4', connectorSize);
+                drawConnector(ctx, offsetX + width * scale, offsetY + height * scale, 'st4', connectorSize);
+                drawConnector(ctx, offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3, 'st4', connectorSize);
+                drawConnector(ctx, offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3, 'st4', connectorSize);
+            }
+
+            // Рисуем полки и соединители для них
+            sections.forEach((section, index) => {
+                if (sections.length === 0) return;
+                const shelfY = offsetY + (height * scale / (sections.length + 1)) * (index + 1);
+                
+                if (section.type === 'shelf') {
+                    ctx.strokeStyle = '#27ae60';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([5, 3]);
+                    
+                    // Полка (передняя линия)
+                    ctx.beginPath();
+                    ctx.moveTo(offsetX, shelfY);
+                    ctx.lineTo(offsetX + width * scale, shelfY);
+                    ctx.stroke();
+                    
+                    // Полка (задняя линия)
+                    ctx.beginPath();
+                    ctx.moveTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3);
+                    ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, shelfY - depth * scale * 0.3);
+                    ctx.stroke();
+
+                    // Соединяем переднюю и заднюю части
+                    ctx.beginPath();
+                    ctx.moveTo(offsetX, shelfY);
+                    ctx.lineTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3);
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(offsetX + width * scale, shelf
