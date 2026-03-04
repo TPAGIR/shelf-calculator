@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор стеллажа из профильной трубы</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 300;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            opacity: 0.8;
+            font-size: 16px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .controls-panel {
+            flex: 1;
+            min-width: 300px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .preview-panel {
+            flex: 1;
+            min-width: 300px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .canvas-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+        }
+
+        .material-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .material-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .material-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.2);
+        }
+
+        .material-option.selected {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .material-option span {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .material-option small {
+            display: block;
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .result-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item .label {
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .result-item .value {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .total-cost {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .total-cost .amount {
+            font-size: 32px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .total-cost .currency {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .connector-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4fd;
+            border-radius: 8px;
+        }
+
+        .connector-icon {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ Конструктор стеллажа из профильной трубы</h1>
+            <p>Создайте стеллаж с точным расчетом материалов и стоимости</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="controls-panel">
+                <h2 style="color: #2c3e50; margin-top: 0;">Параметры стеллажа</h2>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Ширина (мм)</label>
+                        <input type="number" id="width" value="1000" min="500" max="3000" step="10">
+                    </div>
+                    <div class="input-group">
+                        <label>Глубина (мм)</label>
+                        <input type="number" id="depth" value="500" min="300" max="1500" step="10">
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Высота (мм)</label>
+                        <input type="number" id="height" value="2000" min="500" max="3000" step="10">
+                    </div>
+                    <div class="input-group">
+                        <label>Кол-во полок</label>
+                        <input type="number" id="shelves" value="4" min="1" max="10">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Профиль</label>
+                    <select id="profile">
+                        <option value="20x20">20x20 мм (стенка 1.5 мм)</option>
+                        <option value="25x25">25x25 мм (стенка 2 мм)</option>
+                        <option value="30x30" selected>30x30 мм (стенка 2 мм)</option>
+                        <option value="40x40">40x40 мм (стенка 2.5 мм)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Тип соединителей</label>
+                    <select id="connector">
+                        <option value="corner">Угловые соединители (8 шт на узел)</option>
+                        <option value="bracket" selected>Кронштейны усиленные</option>
+                        <option value="clamp">Хомуты сварные</option>
+                    </select>
+                </div>
+                
+                <div class="material-selector">
+                    <div class="material-option selected" data-material="steel">
+                        <span>⚙️ Сталь</span>
+                        <small>250 ₽/кг</small>
+                    </div>
+                    <div class="material-option" data-material="galvanized">
+                        <span>✨ Оцинковка</span>
+                        <small>320 ₽/кг</small>
+                    </div>
+                    <div class="material-option" data-material="stainless">
+                        <span>🔩 Нержавейка</span>
+                        <small>450 ₽/кг</small>
+                    </div>
+                </div>
+                
+                <div class="connector-info">
+                    <div class="connector-icon">8</div>
+                    <div>
+                        <strong>Соединительных узлов:</strong> <span id="connectorCount">12</span><br>
+                        <small>На каждый узел: 8 болтов + 8 гаек</small>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="calculateAndDraw()">
+                    🔄 Рассчитать и обновить чертеж
+                </button>
+            </div>
+            
+            <div class="preview-panel">
+                <h2 style="color: #2c3e50; margin-top: 0;">Чертеж стеллажа</h2>
+                <div class="canvas-container">
+                    <canvas id="shelfCanvas" width="400" height="400"></canvas>
+                </div>
+                
+                <div class="result-panel">
+                    <h3 style="margin-top: 0;">Результаты расчета</h3>
+                    
+                    <div class="result-item">
+                        <span class="label">Профиль вертикальный:</span>
+                        <span class="value" id="verticalLength">0 м</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Профиль горизонтальный:</span>
+                        <span class="value" id="horizontalLength">0 м</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Профиль для полок:</span>
+                        <span class="value" id="shelfLength">0 м</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Всего профиля:</span>
+                        <span class="value" id="totalProfile">0 м</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Соединители (комплектов):</span>
+                        <span class="value" id="connectorsTotal">0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Вес конструкции:</span>
+                        <span class="value" id="totalWeight">0 кг</span>
+                    </div>
+                    
+                    <div class="total-cost">
+                        <span class="currency">Примерная стоимость</span>
+                        <span class="amount" id="totalCost">0</span>
+                        <span class="currency">рублей</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Текущий выбранный материал
+        let currentMaterial = 'steel';
+        
+        // Цены материалов за кг
+        const materialPrices = {
+            steel: 250,
+            galvanized: 320,
+            stainless: 450
+        };
+        
+        // Вес профиля в кг за метр (в зависимости от сечения)
+        const profileWeights = {
+            '20x20': 0.92,
+            '25x25': 1.35,
+            '30x30': 1.78,
+            '40x40': 2.58
+        };
+        
+        // Цена комплекта соединителей
+        const connectorPrices = {
+            corner: 450,
+            bracket: 680,
+            clamp: 350
+        };
+        
+        // Выбор материала
+        document.querySelectorAll('.material-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.material-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                currentMaterial = this.dataset.material;
+                calculateAndDraw();
+            });
+        });
+        
+        function calculateAndDraw() {
+            // Получаем значения из полей ввода
+            const width = parseInt(document.getElementById('width').value) || 1000;
+            const depth = parseInt(document.getElementById('depth').value) || 500;
+            const height = parseInt(document.getElementById('height').value) || 2000;
+            const shelves = parseInt(document.getElementById('shelves').value) || 4;
+            const profile = document.getElementById('profile').value;
+            const connector = document.getElementById('connector').value;
+            
+            // Обновляем счетчик соединителей
+            const verticalPosts = 4; // 4 вертикальные стойки
+            const horizontalFrames = 2; // верхний и нижний контур
+            const connectorNodes = verticalPosts * 2 + horizontalFrames * 4; // упрощенный расчет
+            document.getElementById('connectorCount').textContent = connectorNodes;
+            
+            // Расчет длин профиля
+            const verticalLengthPerPost = height / 1000; // в метрах
+            const totalVerticalLength = verticalLengthPerPost * 4; // 4 стойки
+            
+            const horizontalLengthPerLevel = (2 * (width + depth)) / 1000; // периметр в метрах
+            const totalHorizontalLength = horizontalLengthPerLevel * 2; // верхний и нижний контур
+            
+            const shelfLengthPerLevel = (width * 2 + depth * 2) / 1000; // периметр полки в метрах
+            const totalShelfLength = shelfLengthPerLevel * shelves;
+            
+            const totalProfileLength = totalVerticalLength + totalHorizontalLength + totalShelfLength;
+            
+            // Расчет веса
+            const profileWeight = profileWeights[profile] || 1.78;
+            const totalWeight = (totalProfileLength * profileWeight).toFixed(1);
+            
+            // Расчет стоимости
+            const materialPrice = materialPrices[currentMaterial];
+            const materialCost = totalProfileLength * profileWeight * materialPrice;
+            
+            const connectorPrice = connectorPrices[connector];
+            const connectorCost = connectorNodes * connectorPrice;
+            
+            const totalCost = Math.round(materialCost + connectorCost);
+            
+            // Обновляем отображение результатов
+            document.getElementById('verticalLength').textContent = totalVerticalLength.toFixed(1) + ' м';
+            document.getElementById('horizontalLength').textContent = totalHorizontalLength.toFixed(1) + ' м';
+            document.getElementById('shelfLength').textContent = totalShelfLength.toFixed(1) + ' м';
+            document.getElementById('totalProfile').textContent = totalProfileLength.toFixed(1) + ' м';
+            document.getElementById('connectorsTotal').textContent = connectorNodes;
+            document.getElementById('totalWeight').textContent = totalWeight + ' кг';
+            document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
+            
+            // Рисуем чертеж
+            drawShelf(width, depth, height, shelves);
+        }
+        
+        function drawShelf(width, depth, height, shelves) {
+            const canvas = document.getElementById('shelfCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Масштабируем для отображения на canvas
+            const scale = Math.min(
+                canvas.width / (width + 200),
+                canvas.height / (height + 200)
+            ) * 0.7;
+            
+            const offsetX = 50;
+            const offsetY = 50;
+            
+            // Рисуем стойки (вертикальные линии)
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#2c3e50';
+            
+            // Левая передняя стойка
+            ctx.beginPath();
+            ctx.moveTo(offsetX, offsetY);
+            ctx.lineTo(offsetX, offsetY + height * scale);
+            ctx.stroke();
+            
+            // Правая передняя стойка
+            ctx.beginPath();
+            ctx.moveTo(offsetX + width * scale, offsetY);
+            ctx.lineTo(offsetX + width * scale, offsetY + height * scale);
+            ctx.stroke();
+            
+            // Левая задняя стойка (со смещением для перспективы)
+            ctx.beginPath();
+            ctx.moveTo(offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3);
+            ctx.lineTo(offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
+            ctx.stroke();
+            
+            // Правая задняя стойка
+            ctx.beginPath();
+            ctx.moveTo(offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3);
+            ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
+            ctx.stroke();
+            
+            // Рисуем горизонтальные связи (верх и низ)
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 2;
+            
+            // Верхний контур
+            ctx.beginPath();
+            ctx.moveTo(offsetX, offsetY);
+            ctx.lineTo(offsetX + width * scale, offsetY);
+            ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3);
+            ctx.lineTo(offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3);
+            ctx.closePath();
+            ctx.stroke();
+            
+            // Нижний контур
+            ctx.beginPath();
+            ctx.moveTo(offsetX, offsetY + height * scale);
+            ctx.lineTo(offsetX + width * scale, offsetY + height * scale);
+            ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
+            ctx.lineTo(offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
+            ctx.closePath();
+            ctx.stroke();
+            
+            // Рисуем полки
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 3]);
+            
+            for (let i = 1; i <= shelves; i++) {
+                const shelfY = offsetY + (height * scale / (shelves + 1)) * i;
+                
+                ctx.beginPath();
+                ctx.moveTo(offsetX, shelfY);
+                ctx.lineTo(offsetX + width * scale, shelfY);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3);
+                ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, shelfY - depth * scale * 0.3);
+                ctx.stroke();
+                
+                // Соединяем переднюю и заднюю линии полки
+                ctx.beginPath();
+                ctx.moveTo(offsetX, shelfY);
+                ctx.lineTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(offsetX + width * scale, shelfY);
+                ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, shelfY - depth * scale * 0.3);
+                ctx.stroke();
+            }
+            
+            ctx.setLineDash([]);
+            
+            // Рисуем соединительные узлы
+            ctx.fillStyle = '#f39c12';
+            
+            // Узлы на передних стойках
+            for (let i = 0; i <= shelves + 1; i++) {
+                const y = offsetY + (height * scale / (shelves + 1)) * i;
+                
+                ctx.beginPath();
+                ctx.arc(offsetX, y, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(offsetX + width * scale, y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Добавляем размеры
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillText(width + ' мм', offsetX + 20, offsetY - 10);
+            ctx.fillText(height + ' мм', offsetX - 30, offsetY + height * scale / 2);
+            
+            // Подпись
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#27ae60';
+            ctx.fillText('Стеллаж из профиля ' + document.getElementById('profile').value, 20, 30);
+        }
+        
+        // Инициализация при загрузке
+        window.onload = function() {
+            calculateAndDraw();
+        };
+    </script>
+</body>
+</html>
