@@ -632,272 +632,242 @@
         </div>
     </div>
 
-    <script>
-        // Данные о соединителях
-        const connectors = {
-            st1: { name: 'ST-1', price: 850, color: '#e74c3c', type: 'крестообразный' },
-            st2: { name: 'ST-2', price: 720, color: '#3498db', type: 'т-образный серединный' },
-            st3: { name: 'ST-3', price: 690, color: '#2ecc71', type: 'лучевой' },
-            st4: { name: 'ST-4', price: 780, color: '#f39c12', type: 'угловой' },
-            st5: { name: 'ST-5', price: 750, color: '#9b59b6', type: 'т-образный разветвитель' }
-        };
+<script>
+    // Данные о соединителях
+    const connectors = {
+        st1: { name: 'ST-1', price: 850, color: '#e74c3c', type: 'крестообразный' },
+        st2: { name: 'ST-2', price: 720, color: '#3498db', type: 'т-образный серединный' },
+        st3: { name: 'ST-3', price: 690, color: '#2ecc71', type: 'лучевой' },
+        st4: { name: 'ST-4', price: 780, color: '#f39c12', type: 'угловой' },
+        st5: { name: 'ST-5', price: 750, color: '#9b59b6', type: 'т-образный разветвитель' }
+    };
 
-        // Вес профиля в кг/м
-        const profileWeights = {
-            '20x20': 0.92,
-            '25x25': 1.35,
-            '30x30': 1.78,
-            '40x40': 2.58,
-            '50x50': 3.55
-        };
+    // Вес профиля в кг/м
+    const profileWeights = {
+        '20x20': 0.92,
+        '25x25': 1.35,
+        '30x30': 1.78,
+        '40x40': 2.58,
+        '50x50': 3.55
+    };
 
-        // Цены материалов за кг
-        const materialPrices = {
-            steel: 280,
-            galvanized: 350,
-            stainless: 480
-        };
+    // Цены материалов за кг
+    const materialPrices = {
+        steel: 280,
+        galvanized: 350,
+        stainless: 480
+    };
 
-        let sections = [];
-        let selectedConnector = 'st1';
+    let sections = [];
+    let selectedConnector = 'st1';
 
-        // Функция добавления секции
-        function addSection() {
-            sections.push({
-                number: sections.length + 1,
-                height: 800,
-                type: 'shelf',
-                count: 1
-            });
-            renderSections();
+    // Функция добавления секции
+    window.addSection = function() {
+        sections.push({
+            number: sections.length + 1,
+            height: 800,
+            type: 'shelf',
+            count: 1
+        });
+        renderSections();
+    };
+
+    // Функция удаления секции
+    window.removeSection = function(index) {
+        sections.splice(index, 1);
+        sections.forEach((s, i) => s.number = i + 1);
+        renderSections();
+    };
+
+    // Функция обновления секции
+    window.updateSection = function(index, field, value) {
+        if (field === 'height') {
+            sections[index][field] = parseInt(value) || 800;
+        } else {
+            sections[index][field] = value;
         }
+    };
 
-        // Функция удаления секции
-        function removeSection(index) {
-            sections.splice(index, 1);
-            // Перенумеровываем секции
-            sections.forEach((s, i) => s.number = i + 1);
-            renderSections();
-        }
+    // Функция отрисовки списка секций
+    function renderSections() {
+        const container = document.getElementById('sectionsList');
+        if (!container) return;
+        container.innerHTML = '';
 
-        // Функция обновления секции
-        function updateSection(index, field, value) {
-            if (field === 'height') {
-                sections[index][field] = parseInt(value) || 800;
-            } else {
-                sections[index][field] = value;
+        sections.forEach((section, index) => {
+            const sectionEl = document.createElement('div');
+            sectionEl.className = 'section-item';
+            sectionEl.innerHTML = `
+                <div class="section-number">${index + 1}</div>
+                <select onchange="updateSection(${index}, 'type', this.value)" style="width: 100px;">
+                    <option value="shelf" ${section.type === 'shelf' ? 'selected' : ''}>Полка</option>
+                    <option value="box" ${section.type === 'box' ? 'selected' : ''}>Ящик</option>
+                    <option value="rod" ${section.type === 'rod' ? 'selected' : ''}>Штанга</option>
+                </select>
+                <input type="number" value="${section.height}" onchange="updateSection(${index}, 'height', this.value)" min="200" max="2000" step="10">
+                <span style="margin-left: auto;">мм</span>
+                <button onclick="removeSection(${index})" style="background: #e74c3c; color: white; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer;">✕</button>
+            `;
+            container.appendChild(sectionEl);
+        });
+    }
+
+    // Функция выбора соединителя
+    window.selectConnector = function(connectorId) {
+        selectedConnector = connectorId;
+        document.querySelectorAll('.connector-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        const selectedCard = document.querySelector(`[data-connector="${connectorId}"]`);
+        if (selectedCard) selectedCard.classList.add('selected');
+    };
+
+    // Функция расчета и рисования
+    window.calculateAndDraw = function() {
+        const totalWidth = parseInt(document.getElementById('totalWidth')?.value) || 2000;
+        const totalDepth = parseInt(document.getElementById('totalDepth')?.value) || 600;
+        const totalHeight = parseInt(document.getElementById('totalHeight')?.value) || 2400;
+        const profileTube = document.getElementById('profileTube')?.value || '30x30';
+        const materialType = document.getElementById('materialType')?.value || 'steel';
+
+        const verticalPosts = 4;
+        const verticalAxialLength = (totalHeight / 1000) * verticalPosts;
+        const horizontalAxialLength = (2 * (totalWidth + totalDepth) / 1000) * 2;
+
+        let shelfTubesLength = 0;
+        sections.forEach(section => {
+            if (section.type === 'shelf') {
+                shelfTubesLength += (2 * (totalWidth + totalDepth) / 1000) * section.count;
             }
+        });
+
+        const totalTubeLength = verticalAxialLength + horizontalAxialLength + shelfTubesLength;
+        const st1Count = 4;
+        const st2Count = sections.length * 2;
+        const st3Count = sections.filter(s => s.type === 'rod').length * 4;
+        const st4Count = 4;
+        const st5Count = sections.length * 2;
+
+        const profileWeight = profileWeights[profileTube] || 1.78;
+        const totalWeight = (totalTubeLength * profileWeight).toFixed(1);
+
+        const materialPrice = materialPrices[materialType] || 280;
+        const tubeCost = totalTubeLength * profileWeight * materialPrice;
+        const connectorsCost = 
+            st1Count * (connectors.st1?.price || 850) +
+            st2Count * (connectors.st2?.price || 720) +
+            st3Count * (connectors.st3?.price || 690) +
+            st4Count * (connectors.st4?.price || 780) +
+            st5Count * (connectors.st5?.price || 750);
+        const totalCost = Math.round(tubeCost + connectorsCost);
+
+        document.getElementById('axialVerticalLength').textContent = verticalAxialLength.toFixed(1) + ' м';
+        document.getElementById('axialHorizontalLength').textContent = horizontalAxialLength.toFixed(1) + ' м';
+        document.getElementById('connectorTubesLength').textContent = shelfTubesLength.toFixed(1) + ' м';
+        document.getElementById('totalTubeLength').textContent = totalTubeLength.toFixed(1) + ' м';
+        document.getElementById('totalWeight').textContent = totalWeight + ' кг';
+        document.getElementById('st1Count').textContent = st1Count + ' шт';
+        document.getElementById('st2Count').textContent = st2Count + ' шт';
+        document.getElementById('st3Count').textContent = st3Count + ' шт';
+        document.getElementById('st4Count').textContent = st4Count + ' шт';
+        document.getElementById('st5Count').textContent = st5Count + ' шт';
+        document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
+
+        drawShelf(totalWidth, totalDepth, totalHeight, sections, profileTube);
+    };
+
+    // Функция отрисовки чертежа
+    function drawShelf(width, depth, height, sections, profileTube) {
+        const canvas = document.getElementById('shelfCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (width <= 0 || height <= 0 || depth <= 0) return;
+
+        const scale = Math.min(
+            (canvas.width - 150) / Math.max(width, depth + 100, 1),
+            (canvas.height - 150) / Math.max(height + 100, 1)
+        ) * 0.8;
+
+        const offsetX = 100;
+        const offsetY = 100;
+
+        if (scale <= 0) return;
+
+        // Рисуем осевые трубы
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = 'black';
+
+        ctx.beginPath(); ctx.moveTo(offsetX, offsetY); ctx.lineTo(offsetX, offsetY + height * scale); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(offsetX + width * scale, offsetY); ctx.lineTo(offsetX + width * scale, offsetY + height * scale); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3); ctx.lineTo(offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3); ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3); ctx.stroke();
+
+        function drawConnector(ctx, x, y, type, size) {
+            ctx.fillStyle = connectors[type]?.color || '#999';
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 1;
+            ctx.stroke();
         }
 
-        // Функция отрисовки списка секций
-        function renderSections() {
-            const container = document.getElementById('sectionsList');
-            if (!container) return;
-            container.innerHTML = '';
+        const connectorSize = 8;
 
-            sections.forEach((section, index) => {
-                const sectionEl = document.createElement('div');
-                sectionEl.className = 'section-item';
-                sectionEl.innerHTML = `
-                    <div class="section-number">${index + 1}</div>
-                    <select onchange="updateSection(${index}, 'type', this.value)" style="width: 100px;">
-                        <option value="shelf" ${section.type === 'shelf' ? 'selected' : ''}>Полка</option>
-                        <option value="box" ${section.type === 'box' ? 'selected' : ''}>Ящик</option>
-                        <option value="rod" ${section.type === 'rod' ? 'selected' : ''}>Штанга</option>
-                    </select>
-                    <input type="number" value="${section.height}" onchange="updateSection(${index}, 'height', this.value)" min="200" max="2000" step="10">
-                    <span style="margin-left: auto;">мм</span>
-                    <button onclick="removeSection(${index})" style="background: #e74c3c; color: white; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer;">✕</button>
-                `;
-                container.appendChild(sectionEl);
-            });
+        // ST-1 и ST-4
+        if (connectors.st1) {
+            ctx.fillStyle = connectors.st1.color;
+            drawConnector(ctx, offsetX, offsetY, 'st1', connectorSize);
+            drawConnector(ctx, offsetX + width * scale, offsetY, 'st1', connectorSize);
+            drawConnector(ctx, offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3, 'st1', connectorSize);
+            drawConnector(ctx, offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3, 'st1', connectorSize);
+        }
+        if (connectors.st4) {
+            ctx.fillStyle = connectors.st4.color;
+            drawConnector(ctx, offsetX, offsetY + height * scale, 'st4', connectorSize);
+            drawConnector(ctx, offsetX + width * scale, offsetY + height * scale, 'st4', connectorSize);
+            drawConnector(ctx, offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3, 'st4', connectorSize);
+            drawConnector(ctx, offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3, 'st4', connectorSize);
         }
 
-        // Функция выбора соединителя
-        function selectConnector(connectorId) {
-            selectedConnector = connectorId;
-            document.querySelectorAll('.connector-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            const selectedCard = document.querySelector(`[data-connector="${connectorId}"]`);
-            if (selectedCard) selectedCard.classList.add('selected');
-        }
-
-        // Функция расчета и рисования
-        function calculateAndDraw() {
-            const totalWidth = parseInt(document.getElementById('totalWidth')?.value) || 2000;
-            const totalDepth = parseInt(document.getElementById('totalDepth')?.value) || 600;
-            const totalHeight = parseInt(document.getElementById('totalHeight')?.value) || 2400;
-            const profileTube = document.getElementById('profileTube')?.value || '30x30';
-            const materialType = document.getElementById('materialType')?.value || 'steel';
-
-            // Расчет осевых труб (вертикальные стойки)
-            const verticalPosts = 4;
-            const verticalAxialLength = (totalHeight / 1000) * verticalPosts;
-
-            // Горизонтальные осевые трубы (верх и низ)
-            const horizontalAxialLength = (2 * (totalWidth + totalDepth) / 1000) * 2;
-
-            // Трубы для полок (соединительные)
-            let shelfTubesLength = 0;
-            sections.forEach(section => {
-                if (section.type === 'shelf') {
-                    shelfTubesLength += (2 * (totalWidth + totalDepth) / 1000) * section.count;
-                }
-            });
-
-            const totalTubeLength = verticalAxialLength + horizontalAxialLength + shelfTubesLength;
-
-            // Расчет соединителей
-            const st1Count = 4; // угловые соединения
-            const st2Count = sections.length * 2;
-            const st3Count = sections.filter(s => s.type === 'rod').length * 4;
-            const st4Count = 4;
-            const st5Count = sections.length * 2;
-
-            // Расчет веса
-            const profileWeight = profileWeights[profileTube] || 1.78;
-            const totalWeight = (totalTubeLength * profileWeight).toFixed(1);
-
-            // Расчет стоимости материалов
-            const materialPrice = materialPrices[materialType] || 280;
-            const tubeCost = totalTubeLength * profileWeight * materialPrice;
-
-            // Расчет стоимости соединителей
-            const connectorsCost = 
-                st1Count * (connectors.st1?.price || 850) +
-                st2Count * (connectors.st2?.price || 720) +
-                st3Count * (connectors.st3?.price || 690) +
-                st4Count * (connectors.st4?.price || 780) +
-                st5Count * (connectors.st5?.price || 750);
-
-            const totalCost = Math.round(tubeCost + connectorsCost);
-
-            // Обновление отображения
-            document.getElementById('axialVerticalLength').textContent = verticalAxialLength.toFixed(1) + ' м';
-            document.getElementById('axialHorizontalLength').textContent = horizontalAxialLength.toFixed(1) + ' м';
-            document.getElementById('connectorTubesLength').textContent = shelfTubesLength.toFixed(1) + ' м';
-            document.getElementById('totalTubeLength').textContent = totalTubeLength.toFixed(1) + ' м';
-            document.getElementById('totalWeight').textContent = totalWeight + ' кг';
+        // Рисуем полки
+        sections.forEach((section, index) => {
+            if (sections.length === 0) return;
+            const shelfY = offsetY + (height * scale / (sections.length + 1)) * (index + 1);
             
-            document.getElementById('st1Count').textContent = st1Count + ' шт';
-            document.getElementById('st2Count').textContent = st2Count + ' шт';
-            document.getElementById('st3Count').textContent = st3Count + ' шт';
-            document.getElementById('st4Count').textContent = st4Count + ' шт';
-            document.getElementById('st5Count').textContent = st5Count + ' шт';
-            
-            document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
-
-            // Рисуем чертеж
-            drawShelf(totalWidth, totalDepth, totalHeight, sections, profileTube);
-        }
-
-        // Функция отрисовки чертежа
-        function drawShelf(width, depth, height, sections, profileTube) {
-            const canvas = document.getElementById('shelfCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Защита от некорректных размеров
-            if (width <= 0 || height <= 0 || depth <= 0) return;
-
-            const scale = Math.min(
-                (canvas.width - 150) / Math.max(width, depth + 100, 1),
-                (canvas.height - 150) / Math.max(height + 100, 1)
-            ) * 0.8;
-
-            const offsetX = 100;
-            const offsetY = 100;
-
-            if (scale <= 0) return;
-
-            // Рисуем осевые трубы (жирными линиями)
-            ctx.lineWidth = 4;
-            ctx.strokeStyle = 'black';
-
-            // Левая передняя осевая труба
-            ctx.beginPath();
-            ctx.moveTo(offsetX, offsetY);
-            ctx.lineTo(offsetX, offsetY + height * scale);
-            ctx.stroke();
-
-            // Правая передняя осевая труба
-            ctx.beginPath();
-            ctx.moveTo(offsetX + width * scale, offsetY);
-            ctx.lineTo(offsetX + width * scale, offsetY + height * scale);
-            ctx.stroke();
-
-            // Левая задняя осевая труба (со смещением для перспективы)
-            ctx.beginPath();
-            ctx.moveTo(offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3);
-            ctx.lineTo(offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
-            ctx.stroke();
-
-            // Правая задняя осевая труба
-            ctx.beginPath();
-            ctx.moveTo(offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3);
-            ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3);
-            ctx.stroke();
-
-            // Вспомогательная функция для рисования соединителя
-            function drawConnector(ctx, x, y, type, size) {
-                ctx.fillStyle = connectors[type]?.color || '#999';
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = 'white';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
-
-            const connectorSize = 8;
-
-            // ST-1 (Крестообразные) - верхние углы
-            if (connectors.st1) {
-                ctx.fillStyle = connectors.st1.color;
-                drawConnector(ctx, offsetX, offsetY, 'st1', connectorSize);
-                drawConnector(ctx, offsetX + width * scale, offsetY, 'st1', connectorSize);
-                drawConnector(ctx, offsetX - depth * scale * 0.3, offsetY - depth * scale * 0.3, 'st1', connectorSize);
-                drawConnector(ctx, offsetX + width * scale - depth * scale * 0.3, offsetY - depth * scale * 0.3, 'st1', connectorSize);
-            }
-
-            // ST-4 (Угловые) - нижние углы
-            if (connectors.st4) {
-                ctx.fillStyle = connectors.st4.color;
-                drawConnector(ctx, offsetX, offsetY + height * scale, 'st4', connectorSize);
-                drawConnector(ctx, offsetX + width * scale, offsetY + height * scale, 'st4', connectorSize);
-                drawConnector(ctx, offsetX - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3, 'st4', connectorSize);
-                drawConnector(ctx, offsetX + width * scale - depth * scale * 0.3, offsetY + height * scale - depth * scale * 0.3, 'st4', connectorSize);
-            }
-
-            // Рисуем полки и соединители для них
-            sections.forEach((section, index) => {
-                if (sections.length === 0) return;
-                const shelfY = offsetY + (height * scale / (sections.length + 1)) * (index + 1);
+            if (section.type === 'shelf') {
+                ctx.strokeStyle = '#27ae60';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 3]);
                 
-                if (section.type === 'shelf') {
-                    ctx.strokeStyle = '#27ae60';
-                    ctx.lineWidth = 2;
-                    ctx.setLineDash([5, 3]);
-                    
-                    // Полка (передняя линия)
-                    ctx.beginPath();
-                    ctx.moveTo(offsetX, shelfY);
-                    ctx.lineTo(offsetX + width * scale, shelfY);
-                    ctx.stroke();
-                    
-                    // Полка (задняя линия)
-                    ctx.beginPath();
-                    ctx.moveTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3);
-                    ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, shelfY - depth * scale * 0.3);
-                    ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(offsetX, shelfY); ctx.lineTo(offsetX + width * scale, shelfY); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3); ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, shelfY - depth * scale * 0.3); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(offsetX, shelfY); ctx.lineTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(offsetX + width * scale, shelfY); ctx.lineTo(offsetX + width * scale - depth * scale * 0.3, shelfY - depth * scale * 0.3); ctx.stroke();
+                
+                ctx.setLineDash([]);
 
-                    // Соединяем переднюю и заднюю части
-                    ctx.beginPath();
-                    ctx.moveTo(offsetX, shelfY);
-                    ctx.lineTo(offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3);
-                    ctx.stroke();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(offsetX + width * scale, shelf
+                if (connectors.st2) {
+                    ctx.fillStyle = connectors.st2.color;
+                    drawConnector(ctx, offsetX, shelfY, 'st2', connectorSize);
+                    drawConnector(ctx, offsetX + width * scale, shelfY, 'st2', connectorSize);
+                    drawConnector(ctx, offsetX - depth * scale * 0.3, shelfY - depth * scale * 0.3, 'st2', connectorSize);
+                    drawConnector(ctx, offsetX + width * scale - depth * scale * 0.3, shelfY - depth * scale * 0.3, 'st2', connectorSize);
+                }
+            }
+        });
+    }
+
+    // Инициализация при загрузке
+    window.onload = function() {
+        // Добавляем три полки по умолчанию
+        if (sections.length === 0) {
+            addSection();
+            addSection();
+            addSection();
+        }
+        calculateAndDraw();
+    };
+</script>
