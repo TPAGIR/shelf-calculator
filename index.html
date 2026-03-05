@@ -76,7 +76,7 @@
             background: #f0f4f8;
         }
 
-        /* Левая панель - теперь с автоматической высотой */
+        /* Левая панель */
         .left-panel {
             flex: 1.2;
             background: white;
@@ -90,7 +90,6 @@
             top: 20px;
         }
 
-        /* Стилизация скроллбара */
         .left-panel::-webkit-scrollbar {
             width: 8px;
         }
@@ -165,7 +164,6 @@
             transition: max-height 0.3s ease;
         }
 
-        /* Динамическая высота для контейнера полок */
         .shelves-container {
             max-height: 300px;
         }
@@ -338,7 +336,6 @@
             margin-right: 5px;
         }
 
-        /* Адаптация для мобильных */
         @media (max-width: 768px) {
             .dimensions-panel {
                 position: static;
@@ -453,6 +450,23 @@
             display: flex;
             justify-content: space-between;
             font-size: 15px;
+        }
+
+        .section-total {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .section-total span {
+            font-weight: 700;
+            color: #ffd700;
         }
 
         .connectors-summary {
@@ -672,11 +686,8 @@
 
                     <div class="legend-section">
                         <div class="legend-grid">
-                            <div class="legend-item"><span class="legend-color st1"></span> ST-1: Углы</div>
                             <div class="legend-item"><span class="legend-color st2"></span> ST-2: В-трубы</div>
-                            <div class="legend-item"><span class="legend-color st3"></span> ST-3: Лучевые</div>
                             <div class="legend-item"><span class="legend-color st4"></span> ST-4: У-трубы</div>
-                            <div class="legend-item"><span class="legend-color st5"></span> ST-5: Разветвители</div>
                             <div class="legend-item"><span class="legend-color u-type"></span> Угловые трубы</div>
                             <div class="legend-item"><span class="legend-color v-type"></span> Внутренние трубы</div>
                             <div class="legend-item"><span class="legend-color g-type"></span> Глубинные трубы (Г)</div>
@@ -701,6 +712,12 @@
                         </h4>
                         
                         <div id="cuttingList"></div>
+                        
+                        <!-- Итоговая сумма по трубам -->
+                        <div class="section-total" id="tubesTotal">
+                            <span>ИТОГО ТРУБЫ КВАДРАТНЫЕ:</span>
+                            <span id="tubesTotalAmount">0 ₽</span>
+                        </div>
                     </div>
 
                     <h4 style="color: #1e3c72; margin: 15px 0 10px;">📐 Сводная информация:</h4>
@@ -804,15 +821,12 @@
             
             // Находим максимальную и минимальную высоту полок
             const heights = shelves.map(s => s.height);
-            const maxHeight = Math.max(...heights, 0);
-            const minHeight = Math.min(...heights, totalHeight);
             
             // Добавляем новую полку посередине между существующими
             let newHeight;
             if (shelves.length === 0) {
                 newHeight = totalHeight - 50;
             } else {
-                // Ищем самый большой промежуток
                 const sortedHeights = [...heights].sort((a, b) => b - a);
                 let maxGap = 0;
                 let gapPosition = 0;
@@ -825,7 +839,6 @@
                     }
                 }
                 
-                // Проверяем промежутки сверху и снизу
                 const topGap = totalHeight - sortedHeights[0];
                 if (topGap > maxGap) {
                     maxGap = topGap;
@@ -935,15 +948,13 @@
             const tubeCost = totalTubeLength * profileInfo.pricePerM;
 
             // Расчет соединителей (только используемые)
-            const st1Count = 4 * shelves.length; // По углам на каждой полке - ВСЕГДА ИСПОЛЬЗУЮТСЯ
-            const st2Count = shelves.length * innerTubes * 2; // Для внутренних труб - ИСПОЛЬЗУЮТСЯ ТОЛЬКО ЕСЛИ ЕСТЬ ВНУТРЕННИЕ ТРУБЫ
-            const st3Count = 0; // ST-3 не используется в базовой конфигурации
-            const st4Count = shelves.length * 8; // Для угловых труб (передние и задние) - ВСЕГДА ИСПОЛЬЗУЮТСЯ
-            const st5Count = 0; // ST-5 не используется в базовой конфигурации
+            // ST-1 не используется в данной конфигурации
+            const st2Count = shelves.length * innerTubes * 2; // Для внутренних труб - используются
+            const st4Count = shelves.length * 8; // Для угловых труб (передние и задние) - используются
+            // ST-3 и ST-5 не используются
 
             // Стоимость соединителей (только используемые)
             const connectorsCost = 
-                st1Count * connectors.st1.price +
                 (innerTubes > 0 ? st2Count * connectors.st2.price : 0) +
                 st4Count * connectors.st4.price;
 
@@ -962,6 +973,7 @@
             
             const verticalCost = totalVerticalLength * profileInfo.pricePerM;
             const horizontalCost = totalHorizontalLength * profileInfo.pricePerM;
+            const tubesTotalCost = Math.round(verticalCost + horizontalCost);
             
             cuttingList.innerHTML = `
                 <div class="cutting-section">
@@ -1005,14 +1017,14 @@
                 </div>
             `;
 
+            // Обновляем итоговую сумму по трубам
+            document.getElementById('tubesTotalAmount').textContent = tubesTotalCost.toLocaleString('ru-RU') + ' ₽';
+
             // Детализация соединителей (только используемые)
             const connectorsDetail = document.getElementById('connectorsDetail');
             connectorsDetail.innerHTML = '';
             
             const connItems = [];
-            if (st1Count > 0) {
-                connItems.push({ name: 'ST-1', count: st1Count, price: connectors.st1.price, desc: 'Крестообразные - углы' });
-            }
             if (st2Count > 0 && innerTubes > 0) {
                 connItems.push({ name: 'ST-2', count: st2Count, price: connectors.st2.price, desc: 'Т-образные - для внутренних труб' });
             }
@@ -1031,16 +1043,20 @@
             });
             
             // Добавляем итоговую сумму соединителей
-            const totalConnectorsEl = document.createElement('div');
-            totalConnectorsEl.className = 'total-row';
-            totalConnectorsEl.style.marginTop = '10px';
-            totalConnectorsEl.style.borderTop = '1px dashed #ccc';
-            totalConnectorsEl.style.paddingTop = '10px';
-            totalConnectorsEl.innerHTML = `
-                <span>Итого соединители:</span>
-                <span style="font-weight:700; color:#27ae60;">${connectorsCost} ₽</span>
-            `;
-            connectorsDetail.appendChild(totalConnectorsEl);
+            if (connItems.length > 0) {
+                const totalConnectorsEl = document.createElement('div');
+                totalConnectorsEl.className = 'total-row';
+                totalConnectorsEl.style.marginTop = '10px';
+                totalConnectorsEl.style.borderTop = '1px dashed #ccc';
+                totalConnectorsEl.style.paddingTop = '10px';
+                totalConnectorsEl.innerHTML = `
+                    <span>Итого соединители:</span>
+                    <span style="font-weight:700; color:#27ae60;">${connectorsCost} ₽</span>
+                `;
+                connectorsDetail.appendChild(totalConnectorsEl);
+            } else {
+                connectorsDetail.innerHTML = '<div class="connector-row">Нет соединительных элементов</div>';
+            }
 
             // Информационная панель (только первые 3 пункта)
             document.getElementById('dimensionsPanel').innerHTML = `
