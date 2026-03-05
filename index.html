@@ -94,7 +94,6 @@
             transform: translateY(-2px);
         }
 
-        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -202,7 +201,6 @@
             background: #f0f4f8;
         }
 
-        /* Левая панель */
         .left-panel {
             flex: 1.4;
             background: white;
@@ -216,7 +214,6 @@
             top: 20px;
         }
 
-        /* Адаптация для мобильных устройств */
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -680,7 +677,6 @@
             font-size: 16px;
         }
 
-        /* Правая панель */
         .right-panel {
             flex: 1.6;
         }
@@ -892,7 +888,6 @@
             font-weight: 700;
         }
 
-        /* Стили для печати */
         @media print {
             body { 
                 background: white; 
@@ -1025,7 +1020,6 @@
             </div>
         </div>
 
-        <!-- Модальное окно для заказа -->
         <div class="modal" id="orderModal">
             <div class="modal-content">
                 <h2>📋 Оформление заказа</h2>
@@ -1058,7 +1052,6 @@
             </div>
         </div>
 
-        <!-- Интерактивный тултип -->
         <div class="interactive-tooltip" id="interactiveTooltip">
             <h4 id="tooltipTitle">Редактирование элемента</h4>
             <div id="tooltipContent"></div>
@@ -1198,7 +1191,6 @@
                 <div class="results-section">
                     <h3 style="color: #1e3c72; margin-bottom: 20px;">📊 Спецификация материалов</h3>
                     
-                    <!-- Таблицы для десктопа и печати -->
                     <table class="summary-table">
                         <thead>
                             <tr>
@@ -1304,10 +1296,8 @@
                         </tbody>
                     </table>
 
-                    <!-- Карточки для мобильных устройств -->
                     <div class="mobile-cards" id="mobileCards"></div>
 
-                    <!-- Итоговая стоимость -->
                     <div class="total-cost">
                         <div>ИТОГОВАЯ СТОИМОСТЬ</div>
                         <div><span class="amount" id="totalCost">0</span> ₽</div>
@@ -1528,16 +1518,6 @@
             calculateAndDraw();
         };
 
-        window.updateShelfConnector = function(index, connectorType) {
-            shelves[index].connectorType = connectorType;
-            calculateAndDraw();
-        };
-
-        window.toggleShelf = function(index) {
-            shelves[index].enabled = !shelves[index].enabled;
-            calculateAndDraw();
-        };
-
         function renderShelves() {
             const container = document.getElementById('shelvesList');
             container.innerHTML = '';
@@ -1692,8 +1672,6 @@
             showTooltip(title, content, x, y);
         }
 
-        // ============ ИНТЕРАКТИВНЫЕ ФУНКЦИИ ============
-
         window.updateConnectorType = function(connectorId) {
             console.log('Updating connector:', connectorId);
             const select = document.getElementById('connectorTypeSelect');
@@ -1803,7 +1781,7 @@
             calculateAndDraw();
         }
 
-        function drawConnector(x, y, type, size = 7, id = null, label = '', shelfIndex = null) {
+        function drawConnector(ctx, x, y, type, size = 7, id = null, label = '', shelfIndex = null) {
             let existingConn = null;
             if (id) {
                 existingConn = interactiveElements.connectors.find(c => c.id === id);
@@ -1865,7 +1843,7 @@
             }
         }
 
-        function drawTube(x1, y1, x2, y2, color = '#333', width = 2, dash = false, id = null, label = '', enabled = true, shelfIndex = null) {
+        function drawTube(ctx, x1, y1, x2, y2, color = '#333', width = 2, dash = false, id = null, label = '', enabled = true, shelfIndex = null) {
             let existingTube = null;
             if (id) {
                 existingTube = interactiveElements.tubes.find(t => t.id === id);
@@ -1910,6 +1888,16 @@
             }
             
             ctx.setLineDash([]);
+        }
+
+        function drawLabel(ctx, text, x, y, color = '#000', offsetX = 5, offsetY = -8, bg = true) {
+            if (bg) {
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.fillRect(x + offsetX - 2, y + offsetY - 10, ctx.measureText(text).width + 4, 16);
+            }
+            ctx.fillStyle = color;
+            ctx.font = 'bold 12px Arial';
+            ctx.fillText(text, x + offsetX, y + offsetY);
         }
 
         window.calculateAndDraw = function() {
@@ -1966,7 +1954,6 @@
             document.getElementById('totalHorizontalCount').textContent = (widthTubeCount + depthTubeCount) + ' шт';
             document.getElementById('totalHorizontalCost').textContent = (widthCost + depthCost).toLocaleString('ru-RU') + ' ₽';
 
-            // Обновляем соединители через функцию подсчета
             updateConnectorCounts();
 
             const totalConnectorsCost = parseInt(document.getElementById('totalConnectorsCost').textContent.replace(/[^0-9]/g, '')) || 0;
@@ -1974,7 +1961,6 @@
 
             document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
 
-            // Создаем мобильные карточки
             const mobileCards = document.getElementById('mobileCards');
             mobileCards.innerHTML = `
                 <div class="mobile-card">
@@ -2010,7 +1996,6 @@
                 </div>
             `;
 
-            // Информационная панель
             document.getElementById('dimensionsPanel').innerHTML = `
                 <div><span>📏</span> ${totalWidth}×${totalDepth}×${totalHeight} мм</div>
                 <div><span>📐</span> Секций: ${sections.length}</div>
@@ -2034,19 +2019,18 @@
 
             const backOffset = depth * scale * 0.4;
 
-            // Очищаем массивы интерактивных элементов
             interactiveElements.tubes = [];
             interactiveElements.connectors = [];
 
             // Задние угловые трубы
-            drawTube(offsetX - backOffset, offsetY - backOffset, offsetX - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4, false, 'u3', 'У-3', true);
-            drawTube(offsetX + width * scale - backOffset, offsetY - backOffset, offsetX + width * scale - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4, false, 'u4', 'У-4', true);
+            drawTube(ctx, offsetX - backOffset, offsetY - backOffset, offsetX - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4, false, 'u3', 'У-3', true);
+            drawTube(ctx, offsetX + width * scale - backOffset, offsetY - backOffset, offsetX + width * scale - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4, false, 'u4', 'У-4', true);
             drawLabel(ctx, 'У-3', offsetX - backOffset, offsetY - backOffset, '#1e3c72', 5, -15);
             drawLabel(ctx, 'У-4', offsetX + width * scale - backOffset, offsetY - backOffset, '#1e3c72', -40, -15);
 
             // Передние угловые трубы
-            drawTube(offsetX, offsetY, offsetX, offsetY + height * scale, '#1e3c72', 5, false, 'u1', 'У-1', true);
-            drawTube(offsetX + width * scale, offsetY, offsetX + width * scale, offsetY + height * scale, '#1e3c72', 5, false, 'u2', 'У-2', true);
+            drawTube(ctx, offsetX, offsetY, offsetX, offsetY + height * scale, '#1e3c72', 5, false, 'u1', 'У-1', true);
+            drawTube(ctx, offsetX + width * scale, offsetY, offsetX + width * scale, offsetY + height * scale, '#1e3c72', 5, false, 'u2', 'У-2', true);
             drawLabel(ctx, 'У-1', offsetX, offsetY, '#1e3c72', 5, -10);
             drawLabel(ctx, 'У-2', offsetX + width * scale, offsetY, '#1e3c72', -30, -10);
 
@@ -2057,11 +2041,11 @@
                 const xPos = currentX + sectionWidthPx;
                 
                 if (index < sections.length - 1) {
-                    drawTube(xPos, offsetY, xPos, offsetY + height * scale, '#7f8c8d', 4, false, `v${index+1}`, `В-${index+1}`, true);
+                    drawTube(ctx, xPos, offsetY, xPos, offsetY + height * scale, '#7f8c8d', 4, false, `v${index+1}`, `В-${index+1}`, true);
                     drawLabel(ctx, `В-${index + 1}`, xPos, offsetY, '#7f8c8d', 5, -10);
                     
                     const xPosBack = xPos - backOffset;
-                    drawTube(xPosBack, offsetY - backOffset, xPosBack, offsetY + height * scale - backOffset, '#7f8c8d', 3, false, `v${index+1}z`, `В-${index+1}з`, true);
+                    drawTube(ctx, xPosBack, offsetY - backOffset, xPosBack, offsetY + height * scale - backOffset, '#7f8c8d', 3, false, `v${index+1}z`, `В-${index+1}з`, true);
                     drawLabel(ctx, `В-${index + 1}з`, xPosBack, offsetY - backOffset, '#7f8c8d', 5, -15);
                 }
                 
@@ -2080,12 +2064,12 @@
                 const enabled = shelf.enabled !== false;
 
                 // Трубы по глубине
-                drawTube(offsetX, shelfY, offsetX + width * scale, shelfY, '#e67e22', 3, false, `depth-${shelf.number}`, `Г-${shelf.number}`, enabled, index);
-                drawTube(offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 3, false, `depth-${shelf.number}z`, `Г-${shelf.number}з`, enabled, index);
+                drawTube(ctx, offsetX, shelfY, offsetX + width * scale, shelfY, '#e67e22', 3, false, `depth-${shelf.number}`, `Г-${shelf.number}`, enabled, index);
+                drawTube(ctx, offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 3, false, `depth-${shelf.number}z`, `Г-${shelf.number}з`, enabled, index);
 
                 // Соединительные трубы
-                drawTube(offsetX, shelfY, offsetX - backOffset, shelfYBack, '#e67e22', 2.5, false, `conn-${shelf.number}-1`, `С-${shelf.number}-1`, enabled, index);
-                drawTube(offsetX + width * scale, shelfY, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 2.5, false, `conn-${shelf.number}-2`, `С-${shelf.number}-2`, enabled, index);
+                drawTube(ctx, offsetX, shelfY, offsetX - backOffset, shelfYBack, '#e67e22', 2.5, false, `conn-${shelf.number}-1`, `С-${shelf.number}-1`, enabled, index);
+                drawTube(ctx, offsetX + width * scale, shelfY, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 2.5, false, `conn-${shelf.number}-2`, `С-${shelf.number}-2`, enabled, index);
 
                 // Соединительные трубы между внутренними
                 let currentX = offsetX;
@@ -2096,7 +2080,7 @@
                     if (secIdx < sections.length - 1) {
                         const xInner = xPos;
                         const xInnerBack = xInner - backOffset;
-                        drawTube(xInner, shelfY, xInnerBack, shelfYBack, '#e67e22', 2, false, `conn-inner-${shelf.number}-${secIdx}`, `СВ-${shelf.number}-${secIdx}`, enabled, index);
+                        drawTube(ctx, xInner, shelfY, xInnerBack, shelfYBack, '#e67e22', 2, false, `conn-inner-${shelf.number}-${secIdx}`, `СВ-${shelf.number}-${secIdx}`, enabled, index);
                     }
                     
                     currentX += sectionWidthPx;
@@ -2107,20 +2091,20 @@
                 sections.forEach((section, secIdx) => {
                     const sectionWidthPx = section.width * scale;
                     
-                    drawTube(currentX, shelfY, currentX + sectionWidthPx, shelfY, '#95a5a6', 2.5, false, `width-${shelf.number}-${secIdx}-f`, `Ш-${shelf.number}-${secIdx+1}`, enabled, index);
-                    drawTube(currentX - backOffset, shelfYBack, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 2.5, false, `width-${shelf.number}-${secIdx}-b`, `Ш-${shelf.number}-${secIdx+1}з`, enabled, index);
+                    drawTube(ctx, currentX, shelfY, currentX + sectionWidthPx, shelfY, '#95a5a6', 2.5, false, `width-${shelf.number}-${secIdx}-f`, `Ш-${shelf.number}-${secIdx+1}`, enabled, index);
+                    drawTube(ctx, currentX - backOffset, shelfYBack, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 2.5, false, `width-${shelf.number}-${secIdx}-b`, `Ш-${shelf.number}-${secIdx+1}з`, enabled, index);
                     
-                    drawTube(currentX, shelfY, currentX - backOffset, shelfYBack, '#95a5a6', 1.5, true);
-                    drawTube(currentX + sectionWidthPx, shelfY, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 1.5, true);
+                    drawTube(ctx, currentX, shelfY, currentX - backOffset, shelfYBack, '#95a5a6', 1.5, true);
+                    drawTube(ctx, currentX + sectionWidthPx, shelfY, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 1.5, true);
                     
                     currentX += sectionWidthPx;
                 });
 
                 // Соединители на угловых трубах
-                drawConnector(offsetX, shelfY, 'st4', 8, `conn-u1-${shelf.number}`, 'ST-4', index);
-                drawConnector(offsetX + width * scale, shelfY, 'st4', 8, `conn-u2-${shelf.number}`, 'ST-4', index);
-                drawConnector(offsetX - backOffset, shelfYBack, 'st4', 7, `conn-u3-${shelf.number}`, 'ST-4', index);
-                drawConnector(offsetX + width * scale - backOffset, shelfYBack, 'st4', 7, `conn-u4-${shelf.number}`, 'ST-4', index);
+                drawConnector(ctx, offsetX, shelfY, 'st4', 8, `conn-u1-${shelf.number}`, 'ST-4', index);
+                drawConnector(ctx, offsetX + width * scale, shelfY, 'st4', 8, `conn-u2-${shelf.number}`, 'ST-4', index);
+                drawConnector(ctx, offsetX - backOffset, shelfYBack, 'st4', 7, `conn-u3-${shelf.number}`, 'ST-4', index);
+                drawConnector(ctx, offsetX + width * scale - backOffset, shelfYBack, 'st4', 7, `conn-u4-${shelf.number}`, 'ST-4', index);
 
                 // Соединители на внутренних трубах
                 let currentXForConnectors = offsetX;
@@ -2129,10 +2113,10 @@
                     const xPos = currentXForConnectors + sectionWidthPx;
                     
                     if (secIdx < sections.length - 1) {
-                        drawConnector(xPos, shelfY, 'st2', 7, `conn-v${secIdx+1}-${shelf.number}`, 'ST-2', index);
+                        drawConnector(ctx, xPos, shelfY, 'st2', 7, `conn-v${secIdx+1}-${shelf.number}`, 'ST-2', index);
                         
                         const xPosBack = xPos - backOffset;
-                        drawConnector(xPosBack, shelfYBack, 'st2', 6, `conn-v${secIdx+1}z-${shelf.number}`, 'ST-2', index);
+                        drawConnector(ctx, xPosBack, shelfYBack, 'st2', 6, `conn-v${secIdx+1}z-${shelf.number}`, 'ST-2', index);
                     }
                     
                     currentXForConnectors += sectionWidthPx;
@@ -2152,32 +2136,18 @@
             ctx.lineWidth = 1;
             ctx.setLineDash([5, 3]);
             
-            drawTube(offsetX - 60, offsetY, offsetX - 60, offsetY + height * scale, '#2a5298', 1, true);
+            drawTube(ctx, offsetX - 60, offsetY, offsetX - 60, offsetY + height * scale, '#2a5298', 1, true);
             ctx.fillStyle = '#2a5298';
             ctx.font = '11px Arial';
             ctx.fillText(`${height} мм`, offsetX - 90, offsetY + height * scale / 2);
             
-            drawTube(offsetX, offsetY + height * scale + 40, offsetX + width * scale, offsetY + height * scale + 40, '#2a5298', 1, true);
+            drawTube(ctx, offsetX, offsetY + height * scale + 40, offsetX + width * scale, offsetY + height * scale + 40, '#2a5298', 1, true);
             ctx.fillText(`${Math.round(width)} мм`, offsetX + width * scale / 2 - 40, offsetY + height * scale + 55);
             
             ctx.setLineDash([]);
         }
 
-        function drawLabel(ctx, text, x, y, color = '#000', offsetX = 5, offsetY = -8, bg = true) {
-            if (bg) {
-                ctx.fillStyle = 'rgba(255,255,255,0.9)';
-                ctx.fillRect(x + offsetX - 2, y + offsetY - 10, ctx.measureText(text).width + 4, 16);
-            }
-            ctx.fillStyle = color;
-            ctx.font = 'bold 12px Arial';
-            ctx.fillText(text, x + offsetX, y + offsetY);
-        }
-
-        // Делаем функции глобальными
         window.hideTooltip = hideTooltip;
-        window.updateConnectorType = updateConnectorType;
-        window.toggleTube = toggleTube;
-        window.toggleConnector = toggleConnector;
     </script>
 </body>
 </html>
