@@ -281,7 +281,7 @@
         }
 
         .sections-container {
-            max-height: 250px;
+            max-height: 300px;
             overflow-y: auto;
             padding: 8px;
             background: #f8fafd;
@@ -293,8 +293,14 @@
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            padding: 12px;
+            padding: 15px;
             margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .section-header {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -314,27 +320,45 @@
             flex-shrink: 0;
         }
 
-        .section-input {
+        .section-title-small {
+            font-weight: 600;
+            color: #34495e;
+            flex: 1;
+        }
+
+        .section-inputs {
+            display: flex;
+            gap: 15px;
+            margin-left: 38px;
+        }
+
+        .section-input-group {
             flex: 1;
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        .section-input input {
-            width: 80px;
+        .section-input-group label {
+            font-size: 12px;
+            color: #7f8c8d;
+            white-space: nowrap;
+        }
+
+        .section-input-group input {
+            width: 100px;
             padding: 6px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 13px;
         }
 
-        .section-input span {
+        .section-input-group span {
             font-size: 12px;
             color: #7f8c8d;
         }
 
-        .section-item button {
+        .remove-section-btn {
             background: #e74c3c;
             color: white;
             border: none;
@@ -346,10 +370,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+            align-self: flex-start;
         }
 
-        .section-item button:hover {
+        .remove-section-btn:hover {
             background: #c0392b;
         }
 
@@ -357,7 +381,7 @@
             background: #27ae60;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
@@ -774,7 +798,7 @@
                 </div>
 
                 <div class="section-title">
-                    🏗️ Вертикальные секции (ширина)
+                    🏗️ Вертикальные секции
                 </div>
 
                 <div id="sectionsList" class="sections-container"></div>
@@ -971,8 +995,8 @@
             document.getElementById('totalHeight').value = 2400;
             
             // Добавляем 2 секции с разной шириной
-            addSectionWithWidth(1000); // Секция 1
-            addSectionWithWidth(1200); // Секция 2
+            addSectionWithWidth(1000, 1200); // Секция 1 с высотой 1200мм
+            addSectionWithWidth(800, 1000);  // Секция 2 с высотой 1000мм
             
             // Добавляем 4 полки
             addShelfWithHeight(2400 - 50); // Верхняя полка
@@ -984,10 +1008,11 @@
             updateAllDimensions();
         };
 
-        function addSectionWithWidth(width) {
+        function addSectionWithWidth(width, height) {
             sections.push({ 
                 number: sections.length + 1, 
-                width: width 
+                width: width,
+                height: height || 2400
             });
             renderSections();
         }
@@ -1032,14 +1057,11 @@
         }
 
         window.addSection = function() {
-            // Добавляем секцию со средней шириной
-            const avgWidth = sections.length > 0 
-                ? Math.round(sections.reduce((sum, s) => sum + s.width, 0) / sections.length)
-                : 1000;
-            
+            // Добавляем секцию со стандартными параметрами
             sections.push({ 
                 number: sections.length + 1, 
-                width: avgWidth 
+                width: 1000,
+                height: 2400
             });
             renderSections();
             calculateAndDraw();
@@ -1055,7 +1077,14 @@
         window.updateSectionWidth = function(index, value) {
             const width = parseInt(value) || 500;
             sections[index].width = Math.max(500, Math.min(2000, width));
-            renderSections(); // Обновляем отображение
+            renderSections();
+            calculateAndDraw();
+        };
+
+        window.updateSectionHeight = function(index, value) {
+            const height = parseInt(value) || 1000;
+            sections[index].height = Math.max(1000, Math.min(4000, height));
+            renderSections();
             calculateAndDraw();
         };
 
@@ -1067,13 +1096,25 @@
                 const el = document.createElement('div');
                 el.className = 'section-item';
                 el.innerHTML = `
-                    <div class="section-number">${index + 1}</div>
-                    <div class="section-input">
-                        <input type="number" value="${section.width}" min="500" max="2000" step="10" 
-                               onchange="updateSectionWidth(${index}, this.value)">
-                        <span>мм</span>
+                    <div class="section-header">
+                        <div class="section-number">${index + 1}</div>
+                        <div class="section-title-small">Секция ${index + 1}</div>
+                        <button class="remove-section-btn" onclick="removeSection(${index})">✕</button>
                     </div>
-                    <button onclick="removeSection(${index})">✕</button>
+                    <div class="section-inputs">
+                        <div class="section-input-group">
+                            <label>Ширина:</label>
+                            <input type="number" value="${section.width}" min="500" max="2000" step="10" 
+                                   onchange="updateSectionWidth(${index}, this.value)">
+                            <span>мм</span>
+                        </div>
+                        <div class="section-input-group">
+                            <label>Высота:</label>
+                            <input type="number" value="${section.height}" min="1000" max="4000" step="10" 
+                                   onchange="updateSectionHeight(${index}, this.value)">
+                            <span>мм</span>
+                        </div>
+                    </div>
                 `;
                 container.appendChild(el);
             });
