@@ -335,6 +335,8 @@
         .st5 { background: #9b59b6; }
         .u-type { background: #1e3c72; }
         .v-type { background: #7f8c8d; }
+        .g-type { background: #e67e22; }
+        .sh-type { background: #95a5a6; }
 
         .results-section {
             background: white;
@@ -378,8 +380,10 @@
             font-size: 13px;
         }
 
-        .cutting-item.vertical { border-left-color: #1e3c72; }
-        .cutting-item.horizontal { border-left-color: #f39c12; }
+        .cutting-item.vertical-u { border-left-color: #1e3c72; }
+        .cutting-item.vertical-v { border-left-color: #7f8c8d; }
+        .cutting-item.horizontal-g { border-left-color: #e67e22; }
+        .cutting-item.horizontal-sh { border-left-color: #95a5a6; }
 
         .cutting-item .title {
             font-weight: 700;
@@ -544,11 +548,12 @@
                     <div class="input-group">
                         <label>Профиль трубы</label>
                         <select id="profileTube" onchange="calculateAndDraw()">
-                            <option value="20x20">20x20x1.5 мм</option>
-                            <option value="25x25">25x25x2 мм</option>
-                            <option value="30x30" selected>30x30x2 мм</option>
-                            <option value="40x40">40x40x2.5 мм</option>
-                            <option value="50x50">50x50x3 мм</option>
+                            <option value="30x30x1.5">30x30x1.5 мм (1.5 кг/м, 100 ₽/м)</option>
+                            <option value="30x30x2" selected>30x30x2 мм (2.0 кг/м, 130 ₽/м)</option>
+                            <option value="30x30x0.8">30x30x0.8 мм (0.9 кг/м, 100 ₽/м)</option>
+                            <option value="25x25x1.5">25x25x1.5 мм (1.3 кг/м, 90 ₽/м)</option>
+                            <option value="25x25x2">25x25x2 мм (1.7 кг/м, 110 ₽/м)</option>
+                            <option value="25x25x0.8">25x25x0.8 мм (0.6 кг/м, 90 ₽/м)</option>
                         </select>
                     </div>
                 </div>
@@ -577,7 +582,7 @@
                             <div class="connector-icon">ST-1</div>
                             <div>
                                 <div style="font-size:12px;">Крестообразный</div>
-                                <div class="connector-price">850 ₽</div>
+                                <div class="connector-price">380 ₽</div>
                             </div>
                         </div>
                     </div>
@@ -586,7 +591,7 @@
                             <div class="connector-icon">ST-2</div>
                             <div>
                                 <div style="font-size:12px;">Т-образный</div>
-                                <div class="connector-price">720 ₽</div>
+                                <div class="connector-price">320 ₽</div>
                             </div>
                         </div>
                     </div>
@@ -595,7 +600,7 @@
                             <div class="connector-icon">ST-3</div>
                             <div>
                                 <div style="font-size:12px;">Лучевой</div>
-                                <div class="connector-price">690 ₽</div>
+                                <div class="connector-price">250 ₽</div>
                             </div>
                         </div>
                     </div>
@@ -604,7 +609,7 @@
                             <div class="connector-icon">ST-4</div>
                             <div>
                                 <div style="font-size:12px;">Угловой полочный</div>
-                                <div class="connector-price">780 ₽</div>
+                                <div class="connector-price">280 ₽</div>
                             </div>
                         </div>
                     </div>
@@ -613,7 +618,7 @@
                             <div class="connector-icon">ST-5</div>
                             <div>
                                 <div style="font-size:12px;">Т-разветвитель</div>
-                                <div class="connector-price">750 ₽</div>
+                                <div class="connector-price">220 ₽</div>
                             </div>
                         </div>
                     </div>
@@ -624,9 +629,7 @@
                 </div>
 
                 <select id="materialType" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 15px;" onchange="calculateAndDraw()">
-                    <option value="steel">Сталь обычная - 280 ₽/кг</option>
-                    <option value="galvanized">Оцинкованная сталь - 350 ₽/кг</option>
-                    <option value="stainless">Нержавеющая сталь - 480 ₽/кг</option>
+                    <option value="steel">Сталь обычная</option>
                 </select>
             </div>
 
@@ -646,6 +649,8 @@
                             <div class="legend-item"><span class="legend-color st5"></span> ST-5: Разветвители</div>
                             <div class="legend-item"><span class="legend-color u-type"></span> У-1...У-4</div>
                             <div class="legend-item"><span class="legend-color v-type"></span> В-1...В-n</div>
+                            <div class="legend-item"><span class="legend-color g-type"></span> Г-трубы (глубина)</div>
+                            <div class="legend-item"><span class="legend-color sh-type"></span> Ш-трубы (ширина)</div>
                         </div>
                     </div>
                 </div>
@@ -665,7 +670,8 @@
                     <h4 style="color: #1e3c72; margin: 15px 0 10px;">📐 Сводная информация:</h4>
                     <table class="results-table">
                         <tr><td>Вертикальные трубы (У-1...У-4, В-1...В-n):</td><td id="verticalTubesLength">0 м</td></tr>
-                        <tr><td>Горизонтальные трубы (глубинные Г и широтные Ш):</td><td id="horizontalTubesLength">0 м</td></tr>
+                        <tr><td>Горизонтальные трубы по ширине (Ш-1-1...Ш-n-m):</td><td id="widthTubesLength">0 м</td></tr>
+                        <tr><td>Горизонтальные трубы по глубине (Г-1-1...Г-n-m):</td><td id="depthTubesLength">0 м</td></tr>
                         <tr><td>Всего профильной трубы:</td><td id="totalTubeLength">0 м</td></tr>
                         <tr><td>Вес конструкции:</td><td id="totalWeight">0 кг</td></tr>
                     </table>
@@ -692,19 +698,20 @@
 
     <script>
         const connectors = {
-            st1: { name: 'ST-1', price: 850, color: '#e74c3c' },
-            st2: { name: 'ST-2', price: 720, color: '#3498db' },
-            st3: { name: 'ST-3', price: 690, color: '#2ecc71' },
-            st4: { name: 'ST-4', price: 780, color: '#f39c12' },
-            st5: { name: 'ST-5', price: 750, color: '#9b59b6' }
+            st1: { name: 'ST-1', price: 380, color: '#e74c3c' },
+            st2: { name: 'ST-2', price: 320, color: '#3498db' },
+            st3: { name: 'ST-3', price: 250, color: '#2ecc71' },
+            st4: { name: 'ST-4', price: 280, color: '#f39c12' },
+            st5: { name: 'ST-5', price: 220, color: '#9b59b6' }
         };
 
-        const profileWeights = {
-            '20x20': 0.92, '25x25': 1.35, '30x30': 1.78, '40x40': 2.58, '50x50': 3.55
-        };
-
-        const materialPrices = {
-            steel: 280, galvanized: 350, stainless: 480
+        const profileData = {
+            '30x30x1.5': { weight: 1.5, pricePerM: 100 },
+            '30x30x2': { weight: 2.0, pricePerM: 130 },
+            '30x30x0.8': { weight: 0.9, pricePerM: 100 },
+            '25x25x1.5': { weight: 1.3, pricePerM: 90 },
+            '25x25x2': { weight: 1.7, pricePerM: 110 },
+            '25x25x0.8': { weight: 0.6, pricePerM: 90 }
         };
 
         let sections = [];
@@ -712,7 +719,8 @@
         let selectedConnector = 'st4';
 
         window.onload = function() {
-            addSection();
+            addSection(); // Добавляем одну секцию (всего будет 2 секции)
+            addSection(); // Добавляем вторую секцию для примера
             addShelf(); // Верхняя полка
             addShelf(); // Средняя полка
             addShelf(); // Нижняя полка
@@ -825,56 +833,61 @@
             const sectionWidth = parseInt(document.getElementById('sectionWidth')?.value) || 1000;
             const totalDepth = parseInt(document.getElementById('totalDepth')?.value) || 600;
             const totalHeight = parseInt(document.getElementById('totalHeight')?.value) || 2400;
-            const profileTube = document.getElementById('profileTube')?.value || '30x30';
+            const profileTube = document.getElementById('profileTube')?.value || '30x30x2';
             const materialType = document.getElementById('materialType')?.value || 'steel';
 
             const totalWidth = sectionWidth * (sections.length + 1);
             const innerTubes = sections.length * 2;
 
-            // Сортируем полки по высоте для нумерации
-            const sortedShelves = [...shelves].sort((a, b) => a.height - b.height); // от нижней к верхней
+            // Сортируем полки по высоте для нумерации (от нижней к верхней)
+            const sortedShelves = [...shelves].sort((a, b) => a.height - b.height);
 
-            // Расчет длин труб
+            // Количество труб
+            const verticalCount = 4 + innerTubes; // У-1...У-4 + В-1...В-n и их задние
+            
+            // Широтные трубы Ш (по ширине секций): (секций+1) передних + (секций+1) задних для каждой полки
+            const widthTubeCount = sortedShelves.length * (sections.length + 1) * 2;
+            
+            // Глубинные трубы Г (по глубине): 2 передние + 2 задние для каждой полки
+            const depthTubeCount = sortedShelves.length * 4;
+
+            // Длины труб
             const verticalLength = totalHeight;
-            
-            // Количество заготовок
-            const verticalCount = 4 + innerTubes; // У-1...У-4 + В-1...В-n
+            const widthLength = sectionWidth;
+            const depthLength = totalDepth;
 
-            // Глубинные трубы Г (передние и задние)
-            const depthTubeCount = sortedShelves.length * 4; // для каждой полки передние и задние
-            
-            // Широтные трубы Ш (по ширине секций)
-            const widthTubeCount = sortedShelves.length * (sections.length + 1) * 2; // передние и задние
-
+            // Общая длина
             const totalVerticalLength = (verticalLength * verticalCount) / 1000;
-            const totalHorizontalLength = (totalDepth * depthTubeCount + sectionWidth * widthTubeCount) / 1000;
-            const totalTubeLength = totalVerticalLength + totalHorizontalLength;
+            const totalWidthLength = (widthLength * widthTubeCount) / 1000;
+            const totalDepthLength = (depthLength * depthTubeCount) / 1000;
+            const totalTubeLength = totalVerticalLength + totalWidthLength + totalDepthLength;
+
+            // Вес и стоимость труб
+            const profileInfo = profileData[profileTube] || { weight: 2.0, pricePerM: 130 };
+            const totalWeight = (totalTubeLength * profileInfo.weight).toFixed(1);
+            const tubeCost = totalTubeLength * profileInfo.pricePerM;
 
             // Расчет соединителей
-            const st1Count = 4 * shelves.length;
-            const st2Count = shelves.length * innerTubes * 2;
+            const st1Count = 4 * shelves.length; // По углам на каждой полке
+            const st2Count = shelves.length * innerTubes * 2; // Для внутренних труб (передние и задние)
             const st3Count = sections.length * 2;
-            const st4Count = shelves.length * 8;
+            const st4Count = shelves.length * 8; // Для угловых труб (передние и задние)
             const st5Count = sections.length * 2;
 
-            // Вес
-            const profileWeight = profileWeights[profileTube] || 1.78;
-            const totalWeight = (totalTubeLength * profileWeight).toFixed(1);
-
-            // Стоимость
-            const materialPrice = materialPrices[materialType] || 280;
-            const tubeCost = totalTubeLength * profileWeight * materialPrice;
+            // Стоимость соединителей
             const connectorsCost = 
                 st1Count * connectors.st1.price +
                 st2Count * connectors.st2.price +
                 st3Count * connectors.st3.price +
                 st4Count * connectors.st4.price +
                 st5Count * connectors.st5.price;
+
             const totalCost = Math.round(tubeCost + connectorsCost);
 
             // Обновление отображения
             document.getElementById('verticalTubesLength').textContent = totalVerticalLength.toFixed(1) + ' м';
-            document.getElementById('horizontalTubesLength').textContent = totalHorizontalLength.toFixed(1) + ' м';
+            document.getElementById('widthTubesLength').textContent = totalWidthLength.toFixed(1) + ' м';
+            document.getElementById('depthTubesLength').textContent = totalDepthLength.toFixed(1) + ' м';
             document.getElementById('totalTubeLength').textContent = totalTubeLength.toFixed(1) + ' м';
             document.getElementById('totalWeight').textContent = totalWeight + ' кг';
             document.getElementById('st1Count').textContent = st1Count + ' шт';
@@ -883,17 +896,18 @@
             document.getElementById('st4Count').textContent = st4Count + ' шт';
             document.getElementById('st5Count').textContent = st5Count + ' шт';
             document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
-            document.getElementById('profileInfo').textContent = `(Профиль ${profileTube}мм, ${profileWeight} кг/м, ${materialType === 'steel' ? 'Сталь' : materialType === 'galvanized' ? 'Оцинковка' : 'Нержавейка'})`;
+            document.getElementById('profileInfo').textContent = `(Профиль ${profileTube}мм, ${profileInfo.weight} кг/м, ${profileInfo.pricePerM} ₽/м)`;
 
             // Детализация раскроя
             const cuttingList = document.getElementById('cuttingList');
             
+            // Вертикальные трубы
             let verticalHtml = '<div class="cutting-section"><h5>📏 Вертикальные трубы (длиной ' + totalHeight + ' мм)</h5><div class="cutting-grid">';
             
             // Угловые трубы
             verticalHtml += `
-                <div class="cutting-item vertical">
-                    <div class="title">Угловые трубы</div>
+                <div class="cutting-item vertical-u">
+                    <div class="title">Угловые трубы (синие)</div>
                     <div class="detail-row"><span>У-1 (передняя левая):</span> <span>${totalHeight} мм</span></div>
                     <div class="detail-row"><span>У-2 (передняя правая):</span> <span>${totalHeight} мм</span></div>
                     <div class="detail-row"><span>У-3 (задняя левая):</span> <span>${totalHeight} мм</span></div>
@@ -904,7 +918,7 @@
             
             // Внутренние трубы
             if (innerTubes > 0) {
-                let innerHtml = '<div class="cutting-item vertical"><div class="title">Внутренние трубы</div>';
+                let innerHtml = '<div class="cutting-item vertical-v"><div class="title">Внутренние трубы (серые)</div>';
                 for (let i = 0; i < innerTubes/2; i++) {
                     innerHtml += `<div class="detail-row"><span>В-${i+1} (передняя):</span> <span>${totalHeight} мм</span></div>`;
                     innerHtml += `<div class="detail-row"><span>В-${i+1}з (задняя):</span> <span>${totalHeight} мм</span></div>`;
@@ -919,24 +933,8 @@
             // Горизонтальные трубы
             let horizontalHtml = '<div class="cutting-section"><h5>📐 Горизонтальные трубы</h5><div class="cutting-grid">';
             
-            // Глубинные трубы Г (передние и задние)
-            let depthHtml = '<div class="cutting-item horizontal"><div class="title">Глубинные трубы (Г) - длина ' + totalDepth + ' мм</div>';
-            
-            sortedShelves.forEach((shelf, shelfIndex) => {
-                const shelfNum = shelfIndex + 1;
-                depthHtml += `<div class="detail-row" style="margin-top:8px;"><span style="font-weight:600;">Полка П-${shelf.number} (${shelf.height} мм):</span></div>`;
-                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-1 (передняя левая-правая):</span> <span>${totalDepth} мм</span></div>`;
-                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-2 (передняя правая-левая):</span> <span>${totalDepth} мм</span></div>`;
-                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-1з (задняя левая-правая):</span> <span>${totalDepth} мм</span></div>`;
-                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-2з (задняя правая-левая):</span> <span>${totalDepth} мм</span></div>`;
-            });
-            
-            depthHtml += `<div class="total-row"><span>Всего глубинных:</span> <span>${(totalDepth * depthTubeCount / 1000).toFixed(1)} м (${depthTubeCount} шт)</span></div>`;
-            depthHtml += '</div>';
-            horizontalHtml += depthHtml;
-            
-            // Широтные трубы Ш
-            let widthHtml = '<div class="cutting-item horizontal"><div class="title">Широтные трубы (Ш) - длина ' + sectionWidth + ' мм</div>';
+            // Широтные трубы Ш (по ширине секций) - серые на чертеже
+            let widthHtml = '<div class="cutting-item horizontal-sh"><div class="title">Широтные трубы (Ш) - по ширине секций, длина ' + sectionWidth + ' мм (серые)</div>';
             
             sortedShelves.forEach((shelf, shelfIndex) => {
                 const shelfNum = shelfIndex + 1;
@@ -955,9 +953,25 @@
                 }
             });
             
-            widthHtml += `<div class="total-row"><span>Всего широтных:</span> <span>${(sectionWidth * widthTubeCount / 1000).toFixed(1)} м (${widthTubeCount} шт)</span></div>`;
+            widthHtml += `<div class="total-row"><span>Всего широтных труб:</span> <span>${(sectionWidth * widthTubeCount / 1000).toFixed(1)} м (${widthTubeCount} шт)</span></div>`;
             widthHtml += '</div>';
             horizontalHtml += widthHtml;
+            
+            // Глубинные трубы Г (по глубине) - оранжевые на чертеже
+            let depthHtml = '<div class="cutting-item horizontal-g"><div class="title">Глубинные трубы (Г) - по глубине, длина ' + totalDepth + ' мм (оранжевые)</div>';
+            
+            sortedShelves.forEach((shelf, shelfIndex) => {
+                const shelfNum = shelfIndex + 1;
+                depthHtml += `<div class="detail-row" style="margin-top:8px;"><span style="font-weight:600;">Полка П-${shelf.number} (${shelf.height} мм):</span></div>`;
+                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-1 (передняя левая-правая):</span> <span>${totalDepth} мм</span></div>`;
+                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-2 (передняя правая-левая):</span> <span>${totalDepth} мм</span></div>`;
+                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-1з (задняя левая-правая):</span> <span>${totalDepth} мм</span></div>`;
+                depthHtml += `<div class="detail-row"><span>Г-${shelfNum}-2з (задняя правая-левая):</span> <span>${totalDepth} мм</span></div>`;
+            });
+            
+            depthHtml += `<div class="total-row"><span>Всего глубинных труб:</span> <span>${(totalDepth * depthTubeCount / 1000).toFixed(1)} м (${depthTubeCount} шт)</span></div>`;
+            depthHtml += '</div>';
+            horizontalHtml += depthHtml;
             
             horizontalHtml += '</div></div>';
             
@@ -990,6 +1004,8 @@
                 <div><span>📏</span> ${totalWidth}×${totalDepth}×${totalHeight} мм</div>
                 <div><span>📐</span> Секций: ${sections.length + 1}</div>
                 <div><span>🔧</span> Полок: ${shelves.length}</div>
+                <div><span>⚡</span> Вертикальных труб: ${verticalCount}</div>
+                <div><span>📊</span> Ш-труб: ${widthTubeCount}, Г-труб: ${depthTubeCount}</div>
             `;
 
             drawShelf(totalWidth, totalDepth, totalHeight, sections, shelves, sectionWidth);
@@ -1071,9 +1087,9 @@
                 
                 if (shelfY < offsetY || shelfY > offsetY + height * scale) return;
 
-                // Продольные горизонтальные трубы (передние и задние)
-                drawTube(offsetX, shelfY, offsetX + width * scale, shelfY, '#95a5a6', 3);
-                drawTube(offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#95a5a6', 3);
+                // Продольные горизонтальные трубы (по глубине) - оранжевые
+                drawTube(offsetX, shelfY, offsetX + width * scale, shelfY, '#e67e22', 3);
+                drawTube(offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 3);
 
                 // Соединительные трубы между передними и задними угловыми трубами
                 drawTube(offsetX, shelfY, offsetX - backOffset, shelfYBack, '#e67e22', 2.5);
@@ -1086,12 +1102,12 @@
                     drawTube(xInner, shelfY, xInnerBack, shelfYBack, '#e67e22', 2);
                 });
 
-                // Поперечные горизонтальные трубы (по ширине секций) - между передними трубами
+                // Поперечные горизонтальные трубы (по ширине секций) - серые
                 for (let i = 0; i <= sections.length; i++) {
                     const xLeft = offsetX + (width * scale / (sections.length + 1)) * i;
                     const xRight = offsetX + (width * scale / (sections.length + 1)) * (i + 1);
                     if (i < sections.length + 1 && xRight <= offsetX + width * scale) {
-                        drawTube(xLeft, shelfY, xRight, shelfY, '#95a5a6', 2);
+                        drawTube(xLeft, shelfY, xRight, shelfY, '#95a5a6', 2.5);
                     }
                 }
 
@@ -1100,7 +1116,7 @@
                     const xLeftBack = offsetX + (width * scale / (sections.length + 1)) * i - backOffset;
                     const xRightBack = offsetX + (width * scale / (sections.length + 1)) * (i + 1) - backOffset;
                     if (i < sections.length + 1 && xRightBack <= offsetX + width * scale - backOffset) {
-                        drawTube(xLeftBack, shelfYBack, xRightBack, shelfYBack, '#95a5a6', 2);
+                        drawTube(xLeftBack, shelfYBack, xRightBack, shelfYBack, '#95a5a6', 2.5);
                     }
                 }
 
