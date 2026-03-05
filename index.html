@@ -94,6 +94,7 @@
             transform: translateY(-2px);
         }
 
+        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -201,6 +202,7 @@
             background: #f0f4f8;
         }
 
+        /* Левая панель */
         .left-panel {
             flex: 1.4;
             background: white;
@@ -214,6 +216,7 @@
             top: 20px;
         }
 
+        /* Адаптация для мобильных устройств */
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -677,6 +680,7 @@
             font-size: 16px;
         }
 
+        /* Правая панель */
         .right-panel {
             flex: 1.6;
         }
@@ -708,7 +712,6 @@
             background: white;
             width: 100%;
             height: auto;
-            cursor: pointer;
         }
 
         .dimensions-panel {
@@ -767,58 +770,12 @@
             border-radius: 4px;
         }
 
-        .st1 { background: #e74c3c; }
         .st2 { background: #3498db; }
-        .st3 { background: #2ecc71; }
         .st4 { background: #f39c12; }
-        .st5 { background: #9b59b6; }
         .u-type { background: #1e3c72; }
         .v-type { background: #7f8c8d; }
         .g-type { background: #e67e22; }
         .sh-type { background: #95a5a6; }
-
-        .interactive-tooltip {
-            position: fixed;
-            background: white;
-            border: 2px solid #2a5298;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: none;
-            min-width: 250px;
-        }
-
-        .interactive-tooltip h4 {
-            color: #1e3c72;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
-        .interactive-tooltip button {
-            background: #2a5298;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            margin: 5px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .interactive-tooltip button:hover {
-            background: #1e3c72;
-            transform: translateY(-2px);
-        }
-
-        .interactive-tooltip .close-btn {
-            background: #e74c3c;
-        }
-
-        .interactive-tooltip .close-btn:hover {
-            background: #c0392b;
-        }
 
         .results-section {
             background: white;
@@ -888,6 +845,7 @@
             font-weight: 700;
         }
 
+        /* Стили для печати */
         @media print {
             body { 
                 background: white; 
@@ -909,7 +867,7 @@
                 print-color-adjust: exact;
             }
             
-            .left-panel, .print-btn, .save-btn, .add-section-btn, .add-shelf-btn, .connector-card, .legend-section, .interactive-tooltip {
+            .left-panel, .print-btn, .save-btn, .add-section-btn, .add-shelf-btn, .connector-card, .legend-section {
                 display: none !important;
             }
             
@@ -1008,7 +966,6 @@
         <div class="header">
             <div>
                 <h1>ST<span> CONNECTOR</span> PRO</h1>
-                <p style="font-size: 14px; margin-top: 5px;">Интерактивный конструктор - кликните на чертеже для редактирования</p>
             </div>
             <div class="header-buttons">
                 <button class="save-btn" onclick="openOrderModal()">
@@ -1020,6 +977,7 @@
             </div>
         </div>
 
+        <!-- Модальное окно для заказа -->
         <div class="modal" id="orderModal">
             <div class="modal-content">
                 <h2>📋 Оформление заказа</h2>
@@ -1049,14 +1007,6 @@
                         <button type="button" class="cancel-btn" onclick="closeOrderModal()">Отмена</button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <div class="interactive-tooltip" id="interactiveTooltip">
-            <h4 id="tooltipTitle">Редактирование элемента</h4>
-            <div id="tooltipContent"></div>
-            <div style="display: flex; justify-content: center; margin-top: 15px;">
-                <button class="close-btn" onclick="hideTooltip()">Закрыть</button>
             </div>
         </div>
 
@@ -1107,15 +1057,6 @@
                 </div>
 
                 <div class="connectors-grid">
-                    <div class="connector-card" data-connector="st1" onclick="selectConnector('st1')">
-                        <div class="connector-header">
-                            <div class="connector-icon">ST-1</div>
-                            <div>
-                                <div style="font-size:12px;">Крестообразный</div>
-                                <div class="connector-price">380 ₽</div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="connector-card" data-connector="st2" onclick="selectConnector('st2')">
                         <div class="connector-header">
                             <div class="connector-icon">ST-2</div>
@@ -1125,30 +1066,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="connector-card" data-connector="st3" onclick="selectConnector('st3')">
-                        <div class="connector-header">
-                            <div class="connector-icon">ST-3</div>
-                            <div>
-                                <div style="font-size:12px;">Лучевой</div>
-                                <div class="connector-price">250 ₽</div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="connector-card selected" data-connector="st4" onclick="selectConnector('st4')">
                         <div class="connector-header">
                             <div class="connector-icon">ST-4</div>
                             <div>
                                 <div style="font-size:12px;">Угловой полочный</div>
                                 <div class="connector-price">280 ₽</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="connector-card" data-connector="st5" onclick="selectConnector('st5')">
-                        <div class="connector-header">
-                            <div class="connector-icon">ST-5</div>
-                            <div>
-                                <div style="font-size:12px;">Т-разветвитель</div>
-                                <div class="connector-price">220 ₽</div>
                             </div>
                         </div>
                     </div>
@@ -1167,30 +1090,25 @@
                 <div class="preview-section">
                     <div class="canvas-container">
                         <div class="dimensions-panel" id="dimensionsPanel"></div>
-                        <canvas id="shelfCanvas" width="900" height="650" onclick="handleCanvasClick(event)"></canvas>
+                        <canvas id="shelfCanvas" width="900" height="650"></canvas>
                     </div>
 
                     <div class="legend-section">
                         <div class="legend-grid">
-                            <div class="legend-item"><span class="legend-color st1"></span> ST-1: Крестообразные</div>
-                            <div class="legend-item"><span class="legend-color st2"></span> ST-2: Т-образные</div>
-                            <div class="legend-item"><span class="legend-color st3"></span> ST-3: Лучевые</div>
-                            <div class="legend-item"><span class="legend-color st4"></span> ST-4: Угловые</div>
-                            <div class="legend-item"><span class="legend-color st5"></span> ST-5: Разветвители</div>
+                            <div class="legend-item"><span class="legend-color st2"></span> ST-2: В-трубы</div>
+                            <div class="legend-item"><span class="legend-color st4"></span> ST-4: У-трубы</div>
                             <div class="legend-item"><span class="legend-color u-type"></span> Угловые трубы</div>
                             <div class="legend-item"><span class="legend-color v-type"></span> Внутренние трубы</div>
                             <div class="legend-item"><span class="legend-color g-type"></span> Трубы по глубине</div>
                             <div class="legend-item"><span class="legend-color sh-type"></span> Трубы по ширине</div>
                         </div>
-                        <p style="margin-top: 10px; font-size: 12px; color: #7f8c8d; text-align: center;">
-                            💡 Кликните на любой элемент чертежа для редактирования
-                        </p>
                     </div>
                 </div>
 
                 <div class="results-section">
                     <h3 style="color: #1e3c72; margin-bottom: 20px;">📊 Спецификация материалов</h3>
                     
+                    <!-- Таблицы для десктопа и печати -->
                     <table class="summary-table">
                         <thead>
                             <tr>
@@ -1264,29 +1182,14 @@
                         </thead>
                         <tbody id="connectorsTable">
                             <tr>
-                                <td>ST-1 - Крестообразные</td>
-                                <td id="st1Count">0 шт</td>
-                                <td id="st1Cost">0 ₽</td>
-                            </tr>
-                            <tr>
-                                <td>ST-2 - Т-образные</td>
-                                <td id="st2Count">0 шт</td>
-                                <td id="st2Cost">0 ₽</td>
-                            </tr>
-                            <tr>
-                                <td>ST-3 - Лучевые</td>
-                                <td id="st3Count">0 шт</td>
-                                <td id="st3Cost">0 ₽</td>
-                            </tr>
-                            <tr>
                                 <td>ST-4 - Угловые полочные</td>
                                 <td id="st4Count">0 шт</td>
                                 <td id="st4Cost">0 ₽</td>
                             </tr>
                             <tr>
-                                <td>ST-5 - Т-разветвители</td>
-                                <td id="st5Count">0 шт</td>
-                                <td id="st5Cost">0 ₽</td>
+                                <td>ST-2 - Т-образные</td>
+                                <td id="st2Count">0 шт</td>
+                                <td id="st2Cost">0 ₽</td>
                             </tr>
                             <tr class="total-row">
                                 <td>Итого соединители</td>
@@ -1296,8 +1199,10 @@
                         </tbody>
                     </table>
 
+                    <!-- Карточки для мобильных устройств -->
                     <div class="mobile-cards" id="mobileCards"></div>
 
+                    <!-- Итоговая стоимость -->
                     <div class="total-cost">
                         <div>ИТОГОВАЯ СТОИМОСТЬ</div>
                         <div><span class="amount" id="totalCost">0</span> ₽</div>
@@ -1309,11 +1214,8 @@
 
     <script>
         const connectors = {
-            st1: { name: 'ST-1', price: 380, color: '#e74c3c' },
-            st2: { name: 'ST-2', price: 320, color: '#3498db' },
-            st3: { name: 'ST-3', price: 250, color: '#2ecc71' },
-            st4: { name: 'ST-4', price: 280, color: '#f39c12' },
-            st5: { name: 'ST-5', price: 220, color: '#9b59b6' }
+            st2: { name: 'ST-2', price: 320, color: '#3498db', used: false },
+            st4: { name: 'ST-4', price: 280, color: '#f39c12', used: false }
         };
 
         const profileData = {
@@ -1328,23 +1230,21 @@
         let sections = [];
         let shelves = [];
         let selectedConnector = 'st4';
-        let interactiveElements = {
-            tubes: [],
-            connectors: []
-        };
-        let currentElement = null;
 
         window.onload = function() {
+            // Устанавливаем дефолтные значения
             document.getElementById('totalDepth').value = 600;
             document.getElementById('totalHeight').value = 2400;
             
+            // Добавляем 2 секции
             addSectionWithWidth(1000, 2400);
             addSectionWithWidth(800, 2400);
             
-            addShelfWithHeight(2400 - 50);
-            addShelfWithHeight(1600);
-            addShelfWithHeight(800);
-            addShelfWithHeight(50);
+            // Добавляем 4 полки
+            addShelfWithHeight(2400 - 50); // Верхняя полка
+            addShelfWithHeight(1600); // Верхняя средняя
+            addShelfWithHeight(800); // Нижняя средняя
+            addShelfWithHeight(50); // Нижняя полка
             
             selectConnector('st4');
             updateAllDimensions();
@@ -1354,19 +1254,13 @@
             sections.push({ 
                 number: sections.length + 1, 
                 width: width,
-                height: height || 2400,
-                enabled: true
+                height: height || 2400
             });
             renderSections();
         }
 
         function addShelfWithHeight(height) {
-            shelves.push({ 
-                number: shelves.length + 1, 
-                height: height,
-                enabled: true,
-                connectorType: 'st4'
-            });
+            shelves.push({ number: shelves.length + 1, height: height });
             renderShelves();
         }
 
@@ -1386,6 +1280,8 @@
             const phone = document.getElementById('phone').value;
             const city = document.getElementById('city').value;
             const comment = document.getElementById('comment').value;
+            const totalCost = document.getElementById('totalCost').textContent;
+            const profileTube = document.getElementById('profileTube').value;
             
             alert('Заказ отправлен! Мы свяжемся с вами в ближайшее время.');
             closeOrderModal();
@@ -1399,8 +1295,7 @@
             sections.push({ 
                 number: sections.length + 1, 
                 width: 1000,
-                height: 2400,
-                enabled: true
+                height: 2400
             });
             renderSections();
             calculateAndDraw();
@@ -1495,12 +1390,7 @@
                 newHeight = Math.round(gapPosition);
             }
             
-            shelves.push({ 
-                number: shelves.length + 1, 
-                height: newHeight,
-                enabled: true,
-                connectorType: 'st4'
-            });
+            shelves.push({ number: shelves.length + 1, height: newHeight });
             renderShelves();
             calculateAndDraw();
         };
@@ -1551,355 +1441,6 @@
             document.querySelector(`[data-connector="${connectorId}"]`).classList.add('selected');
         };
 
-        function showTooltip(title, content, x, y) {
-            const tooltip = document.getElementById('interactiveTooltip');
-            document.getElementById('tooltipTitle').textContent = title;
-            document.getElementById('tooltipContent').innerHTML = content;
-            tooltip.style.display = 'block';
-            tooltip.style.left = (x + 10) + 'px';
-            tooltip.style.top = (y + 10) + 'px';
-        }
-
-        function hideTooltip() {
-            document.getElementById('interactiveTooltip').style.display = 'none';
-            currentElement = null;
-        }
-
-        function handleCanvasClick(event) {
-            const canvas = document.getElementById('shelfCanvas');
-            const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            
-            let minDist = 20;
-            let foundElement = null;
-            
-            interactiveElements.connectors.forEach(conn => {
-                const dist = Math.sqrt(Math.pow(conn.x - x, 2) + Math.pow(conn.y - y, 2));
-                if (dist < minDist) {
-                    minDist = dist;
-                    foundElement = { type: 'connector', data: conn };
-                }
-            });
-            
-            interactiveElements.tubes.forEach(tube => {
-                const distToLine = distanceToLineSegment(x, y, tube.x1, tube.y1, tube.x2, tube.y2);
-                if (distToLine < minDist) {
-                    minDist = distToLine;
-                    foundElement = { type: 'tube', data: tube };
-                }
-            });
-            
-            if (foundElement) {
-                currentElement = foundElement;
-                showElementEditor(foundElement, event.clientX, event.clientY);
-            }
-        }
-
-        function distanceToLineSegment(px, py, x1, y1, x2, y2) {
-            const A = px - x1;
-            const B = py - y1;
-            const C = x2 - x1;
-            const D = y2 - y1;
-            
-            const dot = A * C + B * D;
-            const len_sq = C * C + D * D;
-            let param = -1;
-            
-            if (len_sq !== 0) {
-                param = dot / len_sq;
-            }
-            
-            let xx, yy;
-            
-            if (param < 0) {
-                xx = x1;
-                yy = y1;
-            } else if (param > 1) {
-                xx = x2;
-                yy = y2;
-            } else {
-                xx = x1 + param * C;
-                yy = y1 + param * D;
-            }
-            
-            const dx = px - xx;
-            const dy = py - yy;
-            
-            return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        function showElementEditor(element, x, y) {
-            let title, content;
-            
-            if (element.type === 'connector') {
-                const conn = element.data;
-                title = `Редактирование соединителя ${conn.label || conn.id}`;
-                
-                const connectorOptions = Object.keys(connectors).map(key => 
-                    `<option value="${key}" ${conn.type === key ? 'selected' : ''}>${connectors[key].name} - ${connectors[key].price} ₽</option>`
-                ).join('');
-                
-                content = `
-                    <div style="margin-bottom: 10px;">
-                        <label style="display: block; margin-bottom: 5px;">Тип соединителя:</label>
-                        <select id="connectorTypeSelect" style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 5px;">
-                            ${connectorOptions}
-                        </select>
-                    </div>
-                    <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="updateConnectorType('${conn.id}')" style="background: #27ae60;">Применить</button>
-                        <button onclick="toggleConnector('${conn.id}')" style="background: #e74c3c;">${conn.enabled === false ? 'Включить' : 'Отключить'}</button>
-                    </div>
-                `;
-            } else if (element.type === 'tube') {
-                const tube = element.data;
-                title = `Редактирование трубы ${tube.label || tube.id}`;
-                
-                content = `
-                    <div style="margin-bottom: 10px; text-align: center;">
-                        <p><strong>Тип:</strong> ${tube.label || 'Труба'}</p>
-                        <p><strong>Статус:</strong> ${tube.enabled === false ? 'Отключена' : 'Активна'}</p>
-                    </div>
-                    <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="toggleTube('${tube.id}')" style="background: #e74c3c;">
-                            ${tube.enabled === false ? 'Включить' : 'Отключить'} трубу
-                        </button>
-                    </div>
-                `;
-            }
-            
-            showTooltip(title, content, x, y);
-        }
-
-        window.updateConnectorType = function(connectorId) {
-            console.log('Updating connector:', connectorId);
-            const select = document.getElementById('connectorTypeSelect');
-            if (!select) {
-                console.error('Select element not found');
-                return;
-            }
-            const newType = select.value;
-            
-            const connIndex = interactiveElements.connectors.findIndex(c => c.id === connectorId);
-            if (connIndex !== -1) {
-                const conn = interactiveElements.connectors[connIndex];
-                conn.type = newType;
-                
-                if (conn.shelfIndex !== undefined) {
-                    shelves[conn.shelfIndex].connectorType = newType;
-                }
-                
-                console.log('Connector updated:', conn);
-                
-                updateConnectorCounts();
-                
-                hideTooltip();
-                calculateAndDraw();
-            } else {
-                console.error('Connector not found:', connectorId);
-            }
-        };
-
-        window.toggleTube = function(tubeId) {
-            console.log('Toggling tube:', tubeId);
-            const tubeIndex = interactiveElements.tubes.findIndex(t => t.id === tubeId);
-            if (tubeIndex !== -1) {
-                const tube = interactiveElements.tubes[tubeIndex];
-                tube.enabled = !tube.enabled;
-                
-                console.log('Tube toggled:', tube);
-                
-                if (tube.shelfIndex !== undefined) {
-                    shelves[tube.shelfIndex].enabled = tube.enabled;
-                }
-                
-                updateTubeCounts();
-                
-                hideTooltip();
-                calculateAndDraw();
-            } else {
-                console.error('Tube not found:', tubeId);
-            }
-        };
-
-        window.toggleConnector = function(connectorId) {
-            console.log('Toggling connector:', connectorId);
-            const connIndex = interactiveElements.connectors.findIndex(c => c.id === connectorId);
-            if (connIndex !== -1) {
-                const conn = interactiveElements.connectors[connIndex];
-                conn.enabled = !conn.enabled;
-                
-                console.log('Connector toggled:', conn);
-                
-                updateConnectorCounts();
-                hideTooltip();
-                calculateAndDraw();
-            } else {
-                console.error('Connector not found:', connectorId);
-            }
-        };
-
-        function updateConnectorCounts() {
-            let st1Count = 0, st2Count = 0, st3Count = 0, st4Count = 0, st5Count = 0;
-            
-            interactiveElements.connectors.forEach(conn => {
-                if (conn.enabled !== false) {
-                    switch(conn.type) {
-                        case 'st1': st1Count++; break;
-                        case 'st2': st2Count++; break;
-                        case 'st3': st3Count++; break;
-                        case 'st4': st4Count++; break;
-                        case 'st5': st5Count++; break;
-                    }
-                }
-            });
-            
-            document.getElementById('st1Count').textContent = st1Count + ' шт';
-            document.getElementById('st1Cost').textContent = (st1Count * connectors.st1.price).toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('st2Count').textContent = st2Count + ' шт';
-            document.getElementById('st2Cost').textContent = (st2Count * connectors.st2.price).toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('st3Count').textContent = st3Count + ' шт';
-            document.getElementById('st3Cost').textContent = (st3Count * connectors.st3.price).toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('st4Count').textContent = st4Count + ' шт';
-            document.getElementById('st4Cost').textContent = (st4Count * connectors.st4.price).toLocaleString('ru-RU') + ' ₽';
-            document.getElementById('st5Count').textContent = st5Count + ' шт';
-            document.getElementById('st5Cost').textContent = (st5Count * connectors.st5.price).toLocaleString('ru-RU') + ' ₽';
-            
-            const totalConnectors = st1Count + st2Count + st3Count + st4Count + st5Count;
-            const totalCost = st1Count * connectors.st1.price + 
-                              st2Count * connectors.st2.price + 
-                              st3Count * connectors.st3.price + 
-                              st4Count * connectors.st4.price + 
-                              st5Count * connectors.st5.price;
-            
-            document.getElementById('totalConnectorsCount').textContent = totalConnectors + ' шт';
-            document.getElementById('totalConnectorsCost').textContent = totalCost.toLocaleString('ru-RU') + ' ₽';
-        }
-
-        function updateTubeCounts() {
-            calculateAndDraw();
-        }
-
-        function drawConnector(ctx, x, y, type, size = 7, id = null, label = '', shelfIndex = null) {
-            let existingConn = null;
-            if (id) {
-                existingConn = interactiveElements.connectors.find(c => c.id === id);
-            }
-            
-            const enabled = existingConn ? existingConn.enabled : true;
-            const actualType = existingConn ? existingConn.type : type;
-            
-            const color = connectors[actualType]?.color || '#999';
-            
-            if (!enabled) {
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 1.5;
-                ctx.setLineDash([3, 3]);
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                
-                ctx.strokeStyle = '#e74c3c';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(x - size, y - size);
-                ctx.lineTo(x + size, y + size);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(x - size, y + size);
-                ctx.lineTo(x + size, y - size);
-                ctx.stroke();
-            } else {
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = 'white';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-            }
-            
-            if (id) {
-                if (existingConn) {
-                    existingConn.x = x;
-                    existingConn.y = y;
-                    existingConn.type = actualType;
-                    existingConn.label = label;
-                    existingConn.enabled = enabled;
-                    existingConn.shelfIndex = shelfIndex;
-                } else {
-                    interactiveElements.connectors.push({
-                        id: id,
-                        x: x, y: y,
-                        type: actualType,
-                        label: label,
-                        enabled: enabled,
-                        color: color,
-                        shelfIndex: shelfIndex
-                    });
-                }
-            }
-        }
-
-        function drawTube(ctx, x1, y1, x2, y2, color = '#333', width = 2, dash = false, id = null, label = '', enabled = true, shelfIndex = null) {
-            let existingTube = null;
-            if (id) {
-                existingTube = interactiveElements.tubes.find(t => t.id === id);
-            }
-            
-            const tubeEnabled = existingTube ? existingTube.enabled : enabled;
-            
-            if (!tubeEnabled) {
-                ctx.strokeStyle = '#ccc';
-                ctx.setLineDash([5, 3]);
-            } else {
-                ctx.strokeStyle = color;
-                ctx.setLineDash(dash ? [5, 3] : []);
-            }
-            
-            ctx.lineWidth = width;
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-            
-            if (id) {
-                if (existingTube) {
-                    existingTube.x1 = x1;
-                    existingTube.y1 = y1;
-                    existingTube.x2 = x2;
-                    existingTube.y2 = y2;
-                    existingTube.label = label;
-                    existingTube.enabled = tubeEnabled;
-                    existingTube.color = color;
-                    existingTube.shelfIndex = shelfIndex;
-                } else {
-                    interactiveElements.tubes.push({
-                        id: id,
-                        x1: x1, y1: y1, x2: x2, y2: y2,
-                        label: label,
-                        enabled: tubeEnabled,
-                        color: color,
-                        shelfIndex: shelfIndex
-                    });
-                }
-            }
-            
-            ctx.setLineDash([]);
-        }
-
-        function drawLabel(ctx, text, x, y, color = '#000', offsetX = 5, offsetY = -8, bg = true) {
-            if (bg) {
-                ctx.fillStyle = 'rgba(255,255,255,0.9)';
-                ctx.fillRect(x + offsetX - 2, y + offsetY - 10, ctx.measureText(text).width + 4, 16);
-            }
-            ctx.fillStyle = color;
-            ctx.font = 'bold 12px Arial';
-            ctx.fillText(text, x + offsetX, y + offsetY);
-        }
-
         window.calculateAndDraw = function() {
             const totalDepth = parseInt(document.getElementById('totalDepth')?.value) || 600;
             const totalHeight = parseInt(document.getElementById('totalHeight')?.value) || 2400;
@@ -1913,15 +1454,14 @@
             
             let totalWidthLength = 0;
             let widthTubeCount = 0;
-            let enabledShelves = shelves.filter(s => s.enabled !== false);
             
             sections.forEach(section => {
-                const sectionWidthTubes = enabledShelves.length * 2;
+                const sectionWidthTubes = sortedShelves.length * 2;
                 totalWidthLength += (section.width * sectionWidthTubes) / 1000;
                 widthTubeCount += sectionWidthTubes;
             });
             
-            const depthTubeCount = enabledShelves.length * 4;
+            const depthTubeCount = sortedShelves.length * 4;
             const totalDepthLength = (totalDepth * depthTubeCount) / 1000;
             const verticalLength = totalHeight;
             const totalVerticalLength = (verticalLength * (cornerCount + innerTubes)) / 1000;
@@ -1937,6 +1477,14 @@
             
             const tubeCost = cornerCost + innerCost + widthCost + depthCost;
 
+            const st4Count = sortedShelves.length * 4;
+            const st2Count = sortedShelves.length * 4;
+            const st4Cost = st4Count * connectors.st4.price;
+            const st2Cost = st2Count * connectors.st2.price;
+            const connectorsCost = st4Cost + st2Cost;
+            const totalCost = Math.round(tubeCost + connectorsCost);
+
+            // Обновляем таблицы
             document.getElementById('verticalLength').textContent = totalHeight;
             document.getElementById('depthLength').textContent = totalDepth;
 
@@ -1954,13 +1502,16 @@
             document.getElementById('totalHorizontalCount').textContent = (widthTubeCount + depthTubeCount) + ' шт';
             document.getElementById('totalHorizontalCost').textContent = (widthCost + depthCost).toLocaleString('ru-RU') + ' ₽';
 
-            updateConnectorCounts();
-
-            const totalConnectorsCost = parseInt(document.getElementById('totalConnectorsCost').textContent.replace(/[^0-9]/g, '')) || 0;
-            const totalCost = tubeCost + totalConnectorsCost;
+            document.getElementById('st4Count').textContent = st4Count + ' шт';
+            document.getElementById('st4Cost').textContent = st4Cost.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('st2Count').textContent = st2Count + ' шт';
+            document.getElementById('st2Cost').textContent = st2Cost.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('totalConnectorsCount').textContent = (st4Count + st2Count) + ' шт';
+            document.getElementById('totalConnectorsCost').textContent = connectorsCost.toLocaleString('ru-RU') + ' ₽';
 
             document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
 
+            // Создаем мобильные карточки
             const mobileCards = document.getElementById('mobileCards');
             mobileCards.innerHTML = `
                 <div class="mobile-card">
@@ -1994,8 +1545,25 @@
                         <span>${(widthTubeCount + depthTubeCount)} шт - ${(widthCost + depthCost).toLocaleString('ru-RU')} ₽</span>
                     </div>
                 </div>
+                
+                <div class="mobile-card">
+                    <h4>🔩 Соединительные элементы</h4>
+                    <div class="mobile-card-row">
+                        <span class="label">ST-4 - Угловые полочные:</span>
+                        <span class="value">${st4Count} шт - ${st4Cost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-row">
+                        <span class="label">ST-2 - Т-образные:</span>
+                        <span class="value">${st2Count} шт - ${st2Cost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-total">
+                        <span class="total-label">Итого соединители:</span>
+                        <span>${(st4Count + st2Count)} шт - ${connectorsCost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                </div>
             `;
 
+            // Информационная панель
             document.getElementById('dimensionsPanel').innerHTML = `
                 <div><span>📏</span> ${totalWidth}×${totalDepth}×${totalHeight} мм</div>
                 <div><span>📐</span> Секций: ${sections.length}</div>
@@ -2019,20 +1587,47 @@
 
             const backOffset = depth * scale * 0.4;
 
-            interactiveElements.tubes = [];
-            interactiveElements.connectors = [];
+            function drawTube(x1, y1, x2, y2, color = '#333', width = 2, dash = false) {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                ctx.setLineDash(dash ? [5, 3] : []);
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+
+            function drawLabel(text, x, y, color = '#000', offsetX = 5, offsetY = -8, bg = true) {
+                if (bg) {
+                    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                    ctx.fillRect(x + offsetX - 2, y + offsetY - 10, ctx.measureText(text).width + 4, 16);
+                }
+                ctx.fillStyle = color;
+                ctx.font = 'bold 12px Arial';
+                ctx.fillText(text, x + offsetX, y + offsetY);
+            }
+
+            function drawConnector(x, y, type, size = 7) {
+                ctx.fillStyle = connectors[type]?.color || '#999';
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
 
             // Задние угловые трубы
-            drawTube(ctx, offsetX - backOffset, offsetY - backOffset, offsetX - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4, false, 'u3', 'У-3', true);
-            drawTube(ctx, offsetX + width * scale - backOffset, offsetY - backOffset, offsetX + width * scale - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4, false, 'u4', 'У-4', true);
-            drawLabel(ctx, 'У-3', offsetX - backOffset, offsetY - backOffset, '#1e3c72', 5, -15);
-            drawLabel(ctx, 'У-4', offsetX + width * scale - backOffset, offsetY - backOffset, '#1e3c72', -40, -15);
+            drawTube(offsetX - backOffset, offsetY - backOffset, offsetX - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4);
+            drawTube(offsetX + width * scale - backOffset, offsetY - backOffset, offsetX + width * scale - backOffset, offsetY + height * scale - backOffset, '#1e3c72', 4);
+            drawLabel('У-3', offsetX - backOffset, offsetY - backOffset, '#1e3c72', 5, -15);
+            drawLabel('У-4', offsetX + width * scale - backOffset, offsetY - backOffset, '#1e3c72', -40, -15);
 
             // Передние угловые трубы
-            drawTube(ctx, offsetX, offsetY, offsetX, offsetY + height * scale, '#1e3c72', 5, false, 'u1', 'У-1', true);
-            drawTube(ctx, offsetX + width * scale, offsetY, offsetX + width * scale, offsetY + height * scale, '#1e3c72', 5, false, 'u2', 'У-2', true);
-            drawLabel(ctx, 'У-1', offsetX, offsetY, '#1e3c72', 5, -10);
-            drawLabel(ctx, 'У-2', offsetX + width * scale, offsetY, '#1e3c72', -30, -10);
+            drawTube(offsetX, offsetY, offsetX, offsetY + height * scale, '#1e3c72', 5);
+            drawTube(offsetX + width * scale, offsetY, offsetX + width * scale, offsetY + height * scale, '#1e3c72', 5);
+            drawLabel('У-1', offsetX, offsetY, '#1e3c72', 5, -10);
+            drawLabel('У-2', offsetX + width * scale, offsetY, '#1e3c72', -30, -10);
 
             // Внутренние трубы
             let currentX = offsetX;
@@ -2041,12 +1636,12 @@
                 const xPos = currentX + sectionWidthPx;
                 
                 if (index < sections.length - 1) {
-                    drawTube(ctx, xPos, offsetY, xPos, offsetY + height * scale, '#7f8c8d', 4, false, `v${index+1}`, `В-${index+1}`, true);
-                    drawLabel(ctx, `В-${index + 1}`, xPos, offsetY, '#7f8c8d', 5, -10);
+                    drawTube(xPos, offsetY, xPos, offsetY + height * scale, '#7f8c8d', 4);
+                    drawLabel(`В-${index + 1}`, xPos, offsetY, '#7f8c8d', 5, -10);
                     
                     const xPosBack = xPos - backOffset;
-                    drawTube(ctx, xPosBack, offsetY - backOffset, xPosBack, offsetY + height * scale - backOffset, '#7f8c8d', 3, false, `v${index+1}z`, `В-${index+1}з`, true);
-                    drawLabel(ctx, `В-${index + 1}з`, xPosBack, offsetY - backOffset, '#7f8c8d', 5, -15);
+                    drawTube(xPosBack, offsetY - backOffset, xPosBack, offsetY + height * scale - backOffset, '#7f8c8d', 3);
+                    drawLabel(`В-${index + 1}з`, xPosBack, offsetY - backOffset, '#7f8c8d', 5, -15);
                 }
                 
                 currentX += sectionWidthPx;
@@ -2061,15 +1656,13 @@
                 
                 if (shelfY < offsetY || shelfY > offsetY + height * scale) return;
 
-                const enabled = shelf.enabled !== false;
-
                 // Трубы по глубине
-                drawTube(ctx, offsetX, shelfY, offsetX + width * scale, shelfY, '#e67e22', 3, false, `depth-${shelf.number}`, `Г-${shelf.number}`, enabled, index);
-                drawTube(ctx, offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 3, false, `depth-${shelf.number}z`, `Г-${shelf.number}з`, enabled, index);
+                drawTube(offsetX, shelfY, offsetX + width * scale, shelfY, '#e67e22', 3);
+                drawTube(offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 3);
 
                 // Соединительные трубы
-                drawTube(ctx, offsetX, shelfY, offsetX - backOffset, shelfYBack, '#e67e22', 2.5, false, `conn-${shelf.number}-1`, `С-${shelf.number}-1`, enabled, index);
-                drawTube(ctx, offsetX + width * scale, shelfY, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 2.5, false, `conn-${shelf.number}-2`, `С-${shelf.number}-2`, enabled, index);
+                drawTube(offsetX, shelfY, offsetX - backOffset, shelfYBack, '#e67e22', 2.5);
+                drawTube(offsetX + width * scale, shelfY, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 2.5);
 
                 // Соединительные трубы между внутренними
                 let currentX = offsetX;
@@ -2080,7 +1673,7 @@
                     if (secIdx < sections.length - 1) {
                         const xInner = xPos;
                         const xInnerBack = xInner - backOffset;
-                        drawTube(ctx, xInner, shelfY, xInnerBack, shelfYBack, '#e67e22', 2, false, `conn-inner-${shelf.number}-${secIdx}`, `СВ-${shelf.number}-${secIdx}`, enabled, index);
+                        drawTube(xInner, shelfY, xInnerBack, shelfYBack, '#e67e22', 2);
                     }
                     
                     currentX += sectionWidthPx;
@@ -2091,32 +1684,31 @@
                 sections.forEach((section, secIdx) => {
                     const sectionWidthPx = section.width * scale;
                     
-                    drawTube(ctx, currentX, shelfY, currentX + sectionWidthPx, shelfY, '#95a5a6', 2.5, false, `width-${shelf.number}-${secIdx}-f`, `Ш-${shelf.number}-${secIdx+1}`, enabled, index);
-                    drawTube(ctx, currentX - backOffset, shelfYBack, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 2.5, false, `width-${shelf.number}-${secIdx}-b`, `Ш-${shelf.number}-${secIdx+1}з`, enabled, index);
+                    drawTube(currentX, shelfY, currentX + sectionWidthPx, shelfY, '#95a5a6', 2.5);
+                    drawTube(currentX - backOffset, shelfYBack, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 2.5);
                     
-                    drawTube(ctx, currentX, shelfY, currentX - backOffset, shelfYBack, '#95a5a6', 1.5, true);
-                    drawTube(ctx, currentX + sectionWidthPx, shelfY, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 1.5, true);
+                    drawTube(currentX, shelfY, currentX - backOffset, shelfYBack, '#95a5a6', 1.5, true);
+                    drawTube(currentX + sectionWidthPx, shelfY, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 1.5, true);
                     
                     currentX += sectionWidthPx;
                 });
 
-                // Соединители на угловых трубах
-                drawConnector(ctx, offsetX, shelfY, 'st4', 8, `conn-u1-${shelf.number}`, 'ST-4', index);
-                drawConnector(ctx, offsetX + width * scale, shelfY, 'st4', 8, `conn-u2-${shelf.number}`, 'ST-4', index);
-                drawConnector(ctx, offsetX - backOffset, shelfYBack, 'st4', 7, `conn-u3-${shelf.number}`, 'ST-4', index);
-                drawConnector(ctx, offsetX + width * scale - backOffset, shelfYBack, 'st4', 7, `conn-u4-${shelf.number}`, 'ST-4', index);
+                // Соединители
+                drawConnector(offsetX, shelfY, 'st4', 8);
+                drawConnector(offsetX + width * scale, shelfY, 'st4', 8);
+                drawConnector(offsetX - backOffset, shelfYBack, 'st4', 7);
+                drawConnector(offsetX + width * scale - backOffset, shelfYBack, 'st4', 7);
 
-                // Соединители на внутренних трубах
                 let currentXForConnectors = offsetX;
                 sections.forEach((section, secIdx) => {
                     const sectionWidthPx = section.width * scale;
                     const xPos = currentXForConnectors + sectionWidthPx;
                     
                     if (secIdx < sections.length - 1) {
-                        drawConnector(ctx, xPos, shelfY, 'st2', 7, `conn-v${secIdx+1}-${shelf.number}`, 'ST-2', index);
+                        drawConnector(xPos, shelfY, 'st2', 7);
                         
                         const xPosBack = xPos - backOffset;
-                        drawConnector(ctx, xPosBack, shelfYBack, 'st2', 6, `conn-v${secIdx+1}z-${shelf.number}`, 'ST-2', index);
+                        drawConnector(xPosBack, shelfYBack, 'st2', 6);
                     }
                     
                     currentXForConnectors += sectionWidthPx;
@@ -2136,18 +1728,16 @@
             ctx.lineWidth = 1;
             ctx.setLineDash([5, 3]);
             
-            drawTube(ctx, offsetX - 60, offsetY, offsetX - 60, offsetY + height * scale, '#2a5298', 1, true);
+            drawTube(offsetX - 60, offsetY, offsetX - 60, offsetY + height * scale, '#2a5298', 1, true);
             ctx.fillStyle = '#2a5298';
             ctx.font = '11px Arial';
             ctx.fillText(`${height} мм`, offsetX - 90, offsetY + height * scale / 2);
             
-            drawTube(ctx, offsetX, offsetY + height * scale + 40, offsetX + width * scale, offsetY + height * scale + 40, '#2a5298', 1, true);
+            drawTube(offsetX, offsetY + height * scale + 40, offsetX + width * scale, offsetY + height * scale + 40, '#2a5298', 1, true);
             ctx.fillText(`${Math.round(width)} мм`, offsetX + width * scale / 2 - 40, offsetY + height * scale + 55);
             
             ctx.setLineDash([]);
         }
-
-        window.hideTooltip = hideTooltip;
     </script>
 </body>
 </html>
