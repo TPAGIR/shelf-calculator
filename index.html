@@ -551,28 +551,6 @@
             border-bottom: none;
         }
 
-        .connectors-summary {
-            background: #f8fafd;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .connectors-summary .title {
-            font-weight: 700;
-            color: #2a5298;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
-        .connector-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            font-size: 14px;
-            color: #555;
-        }
-
         .total-cost {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -832,11 +810,36 @@
                         </tbody>
                     </table>
 
-                    <!-- Соединительные элементы -->
-                    <div class="connectors-summary">
-                        <div class="title">🔩 Соединительные элементы</div>
-                        <div id="connectorsDetail"></div>
-                    </div>
+                    <!-- Таблица соединительных элементов -->
+                    <table class="summary-table">
+                        <thead>
+                            <tr>
+                                <th colspan="3">🔩 Соединительные элементы</th>
+                            </tr>
+                            <tr>
+                                <th>Тип</th>
+                                <th>Количество</th>
+                                <th>Стоимость</th>
+                            </tr>
+                        </thead>
+                        <tbody id="connectorsTable">
+                            <tr>
+                                <td>ST-4 - Угловые полочные</td>
+                                <td id="st4Count">0 шт</td>
+                                <td id="st4Cost">0 ₽</td>
+                            </tr>
+                            <tr>
+                                <td>ST-2 - Т-образные</td>
+                                <td id="st2Count">0 шт</td>
+                                <td id="st2Cost">0 ₽</td>
+                            </tr>
+                            <tr class="total-row">
+                                <td>Итого соединители</td>
+                                <td id="totalConnectorsCount">0 шт</td>
+                                <td id="totalConnectorsCost">0 ₽</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                     <!-- Итоговая стоимость -->
                     <div class="total-cost">
@@ -1063,10 +1066,10 @@
             const cornerCount = 4; // Угловые трубы У-1...У-4
             const innerCount = innerTubes; // Внутренние трубы В-1...В-n и их задние
             
-            // Трубы по ширине Ш (по ширине секций): (секций+1) передних + (секций+1) задних для каждой полки
+            // Трубы по ширине: (секций+1) передних + (секций+1) задних для каждой полки
             const widthTubeCount = sortedShelves.length * (sections.length + 1) * 2;
             
-            // Трубы по глубине Г (по глубине): 2 передние + 2 задние для каждой полки
+            // Трубы по глубине: 2 передние + 2 задние для каждой полки
             const depthTubeCount = sortedShelves.length * 4;
 
             // Длины труб
@@ -1098,9 +1101,9 @@
             const st2Count = sortedShelves.length * 4; // 4 полки × 4 = 16 шт
 
             // Стоимость соединителей
-            const connectorsCost = 
-                st2Count * connectors.st2.price +
-                st4Count * connectors.st4.price;
+            const st4Cost = st4Count * connectors.st4.price;
+            const st2Cost = st2Count * connectors.st2.price;
+            const connectorsCost = st4Cost + st2Cost;
 
             const totalCost = Math.round(tubeCost + connectorsCost);
 
@@ -1124,42 +1127,16 @@
             document.getElementById('totalHorizontalCount').textContent = (widthTubeCount + depthTubeCount) + ' шт';
             document.getElementById('totalHorizontalCost').textContent = (widthCost + depthCost).toLocaleString('ru-RU') + ' ₽';
 
+            // Обновляем таблицу соединителей
+            document.getElementById('st4Count').textContent = st4Count + ' шт';
+            document.getElementById('st4Cost').textContent = st4Cost.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('st2Count').textContent = st2Count + ' шт';
+            document.getElementById('st2Cost').textContent = st2Cost.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('totalConnectorsCount').textContent = (st4Count + st2Count) + ' шт';
+            document.getElementById('totalConnectorsCost').textContent = connectorsCost.toLocaleString('ru-RU') + ' ₽';
+
             // Обновляем итоговую стоимость
             document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
-
-            // Детализация соединителей
-            const connectorsDetail = document.getElementById('connectorsDetail');
-            connectorsDetail.innerHTML = '';
-            
-            const connItems = [
-                { name: 'ST-4', count: st4Count, price: connectors.st4.price, desc: 'Угловые полочные' },
-                { name: 'ST-2', count: st2Count, price: connectors.st2.price, desc: 'Т-образные' }
-            ];
-            
-            connItems.forEach(conn => {
-                const el = document.createElement('div');
-                el.className = 'connector-row';
-                el.innerHTML = `
-                    <span>${conn.name} - ${conn.desc}:</span>
-                    <span style="font-weight:600; color:#2c3e50;">${conn.count} шт × ${conn.price} ₽ = ${conn.count * conn.price} ₽</span>
-                `;
-                connectorsDetail.appendChild(el);
-            });
-            
-            // Добавляем итоговую сумму соединителей
-            const totalConnectorsEl = document.createElement('div');
-            totalConnectorsEl.className = 'total-row';
-            totalConnectorsEl.style.marginTop = '10px';
-            totalConnectorsEl.style.borderTop = '1px dashed #ccc';
-            totalConnectorsEl.style.paddingTop = '10px';
-            totalConnectorsEl.style.display = 'flex';
-            totalConnectorsEl.style.justifyContent = 'space-between';
-            totalConnectorsEl.style.fontWeight = '700';
-            totalConnectorsEl.innerHTML = `
-                <span>Итого соединители:</span>
-                <span style="color:#27ae60;">${connectorsCost} ₽</span>
-            `;
-            connectorsDetail.appendChild(totalConnectorsEl);
 
             // Информационная панель
             document.getElementById('dimensionsPanel').innerHTML = `
