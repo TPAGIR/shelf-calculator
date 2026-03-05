@@ -761,8 +761,8 @@
                             <div class="legend-item"><span class="legend-color st4"></span> ST-4: У-трубы</div>
                             <div class="legend-item"><span class="legend-color u-type"></span> Угловые трубы</div>
                             <div class="legend-item"><span class="legend-color v-type"></span> Внутренние трубы</div>
-                            <div class="legend-item"><span class="legend-color g-type"></span> Глубинные трубы</div>
-                            <div class="legend-item"><span class="legend-color sh-type"></span> Широтные трубы</div>
+                            <div class="legend-item"><span class="legend-color g-type"></span> Трубы по глубине</div>
+                            <div class="legend-item"><span class="legend-color sh-type"></span> Трубы по ширине</div>
                         </div>
                     </div>
                 </div>
@@ -815,12 +815,12 @@
                         </thead>
                         <tbody id="horizontalTubesTable">
                             <tr>
-                                <td>Широтные трубы (длина <span id="widthLength">1000</span> мм)</td>
+                                <td>Трубы по ширине (длина <span id="widthLength">1000</span> мм)</td>
                                 <td id="widthCount">0 шт</td>
                                 <td id="widthCost">0 ₽</td>
                             </tr>
                             <tr>
-                                <td>Глубинные трубы (длина <span id="depthLength">600</span> мм)</td>
+                                <td>Трубы по глубине (длина <span id="depthLength">600</span> мм)</td>
                                 <td id="depthCount">0 шт</td>
                                 <td id="depthCost">0 ₽</td>
                             </tr>
@@ -1063,10 +1063,10 @@
             const cornerCount = 4; // Угловые трубы У-1...У-4
             const innerCount = innerTubes; // Внутренние трубы В-1...В-n и их задние
             
-            // Широтные трубы Ш (по ширине секций): (секций+1) передних + (секций+1) задних для каждой полки
+            // Трубы по ширине Ш (по ширине секций): (секций+1) передних + (секций+1) задних для каждой полки
             const widthTubeCount = sortedShelves.length * (sections.length + 1) * 2;
             
-            // Глубинные трубы Г (по глубине): 2 передние + 2 задние для каждой полки
+            // Трубы по глубине Г (по глубине): 2 передние + 2 задние для каждой полки
             const depthTubeCount = sortedShelves.length * 4;
 
             // Длины труб
@@ -1247,7 +1247,7 @@
                 
                 if (shelfY < offsetY || shelfY > offsetY + height * scale) return;
 
-                // Глубинные трубы (оранжевые)
+                // Трубы по глубине (оранжевые)
                 drawTube(offsetX, shelfY, offsetX + width * scale, shelfY, '#e67e22', 3);
                 drawTube(offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 3);
 
@@ -1262,7 +1262,7 @@
                     drawTube(xInner, shelfY, xInnerBack, shelfYBack, '#e67e22', 2);
                 });
 
-                // Широтные трубы (серые)
+                // Трубы по ширине (серые)
                 for (let i = 0; i <= sections.length; i++) {
                     const xLeft = offsetX + (width * scale / (sections.length + 1)) * i;
                     const xRight = offsetX + (width * scale / (sections.length + 1)) * (i + 1);
@@ -1271,7 +1271,7 @@
                     }
                 }
 
-                // Широтные трубы - между задними трубами
+                // Трубы по ширине - между задними трубами
                 for (let i = 0; i <= sections.length; i++) {
                     const xLeftBack = offsetX + (width * scale / (sections.length + 1)) * i - backOffset;
                     const xRightBack = offsetX + (width * scale / (sections.length + 1)) * (i + 1) - backOffset;
