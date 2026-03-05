@@ -202,32 +202,18 @@
             background: #f0f4f8;
         }
 
-        /* Левая панель - увеличена высота */
+        /* Левая панель - увеличена для десктопа */
         .left-panel {
-            flex: 1.3;
+            flex: 1.4;
             background: white;
             border-radius: 20px;
-            padding: 25px;
+            padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             height: fit-content;
-            max-height: calc(100vh - 120px);
-            overflow-y: auto;
+            max-height: none; /* Убираем ограничение высоты */
+            overflow-y: visible; /* Убираем прокрутку */
             position: sticky;
             top: 20px;
-        }
-
-        .left-panel::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .left-panel::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .left-panel::-webkit-scrollbar-thumb {
-            background: #2a5298;
-            border-radius: 10px;
         }
 
         /* Адаптация для мобильных устройств */
@@ -239,6 +225,7 @@
                 position: static;
                 max-height: none;
                 width: 100%;
+                padding: 20px;
             }
             
             .section-inputs {
@@ -262,15 +249,6 @@
             canvas {
                 width: 100%;
                 height: auto;
-            }
-            
-            .summary-table {
-                font-size: 12px;
-            }
-            
-            .summary-table th,
-            .summary-table td {
-                padding: 8px 5px;
             }
             
             .dimensions-panel {
@@ -317,14 +295,70 @@
                 flex-wrap: wrap;
             }
             
-            .shelf-item > div {
+            .shelf-content {
                 width: 100%;
             }
             
+            /* Переделываем таблицы в карточки для мобильных */
             .summary-table {
+                display: none; /* Скрываем таблицы на мобильных */
+            }
+            
+            .mobile-cards {
                 display: block;
-                overflow-x: auto;
-                white-space: nowrap;
+                margin-bottom: 20px;
+            }
+            
+            .mobile-card {
+                background: #f8fafd;
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-left: 4px solid #2a5298;
+            }
+            
+            .mobile-card h4 {
+                color: #1e3c72;
+                margin-bottom: 12px;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            
+            .mobile-card-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .mobile-card-row:last-child {
+                border-bottom: none;
+            }
+            
+            .mobile-card-row .label {
+                color: #7f8c8d;
+                font-size: 14px;
+            }
+            
+            .mobile-card-row .value {
+                font-weight: 600;
+                color: #2c3e50;
+                font-size: 14px;
+            }
+            
+            .mobile-card-total {
+                background: #1e3c72;
+                color: white;
+                padding: 12px;
+                border-radius: 8px;
+                margin-top: 10px;
+                display: flex;
+                justify-content: space-between;
+                font-weight: 700;
+            }
+            
+            .mobile-card-total .total-label {
+                color: #ffd700;
             }
             
             .legend-grid {
@@ -333,6 +367,13 @@
             
             .results-section {
                 padding: 15px 10px;
+            }
+        }
+
+        /* Десктопные стили */
+        @media (min-width: 1201px) {
+            .mobile-cards {
+                display: none; /* Скрываем карточки на десктопе */
             }
         }
 
@@ -370,7 +411,7 @@
 
         .input-group input, .input-group select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
@@ -403,8 +444,8 @@
         }
 
         .section-number {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             background: #2a5298;
             color: white;
             border-radius: 50%;
@@ -412,7 +453,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
             flex-shrink: 0;
         }
 
@@ -420,12 +461,13 @@
             font-weight: 600;
             color: #34495e;
             flex: 1;
+            font-size: 15px;
         }
 
         .section-inputs {
             display: flex;
             gap: 15px;
-            margin-left: 38px;
+            margin-left: 40px;
             flex-wrap: wrap;
         }
 
@@ -434,25 +476,25 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            min-width: 150px;
+            min-width: 180px;
         }
 
         .section-input-group label {
-            font-size: 12px;
+            font-size: 13px;
             color: #7f8c8d;
             white-space: nowrap;
         }
 
         .section-input-group input {
             width: 100px;
-            padding: 6px;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .section-input-group span {
-            font-size: 12px;
+            font-size: 13px;
             color: #7f8c8d;
         }
 
@@ -460,8 +502,8 @@
             background: #e74c3c;
             color: white;
             border: none;
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
@@ -479,11 +521,11 @@
             background: #27ae60;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             margin-bottom: 15px;
             transition: all 0.3s;
@@ -511,12 +553,12 @@
             margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .shelf-number {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             background: #f39c12;
             color: white;
             border-radius: 50%;
@@ -524,7 +566,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
             flex-shrink: 0;
         }
 
@@ -532,25 +574,25 @@
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
             flex-wrap: wrap;
         }
 
         .shelf-content span {
-            font-size: 13px;
+            font-size: 14px;
             color: #34495e;
         }
 
         .shelf-content input {
-            width: 80px;
-            padding: 6px;
+            width: 100px;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .shelf-content small {
-            font-size: 11px;
+            font-size: 12px;
             color: #7f8c8d;
         }
 
@@ -558,8 +600,8 @@
             background: #e74c3c;
             color: white;
             border: none;
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
@@ -573,11 +615,11 @@
             background: #f39c12;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             margin-bottom: 15px;
             transition: all 0.3s;
@@ -591,7 +633,7 @@
         .connectors-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
@@ -599,7 +641,7 @@
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
-            padding: 12px;
+            padding: 15px;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -618,12 +660,12 @@
         .connector-header {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .connector-icon {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             background: #2a5298;
             color: white;
             border-radius: 8px;
@@ -631,7 +673,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .connector-price {
@@ -642,7 +684,7 @@
 
         /* Правая панель */
         .right-panel {
-            flex: 1.7;
+            flex: 1.6;
         }
 
         .preview-section {
@@ -706,7 +748,6 @@
             border-radius: 20px;
             padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow-x: auto;
         }
 
         .legend-grid {
@@ -741,9 +782,8 @@
         .results-section {
             background: white;
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px;
             margin-top: 20px;
-            overflow-x: auto;
         }
 
         .summary-table {
@@ -753,7 +793,6 @@
             background: #f8fafd;
             border-radius: 10px;
             overflow: hidden;
-            min-width: 600px;
         }
 
         .summary-table th {
@@ -762,11 +801,13 @@
             padding: 12px;
             text-align: left;
             font-weight: 600;
+            font-size: 14px;
         }
 
         .summary-table td {
             padding: 12px;
             border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
         }
 
         .summary-table tr:last-child td {
@@ -783,12 +824,16 @@
             border-bottom: none;
         }
 
+        .mobile-cards {
+            display: none;
+        }
+
         .total-cost {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 12px;
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -954,7 +999,7 @@
                     ⚙️ Материал профиля
                 </div>
 
-                <select id="materialType" style="width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 15px;" onchange="calculateAndDraw()">
+                <select id="materialType" style="width: 100%; padding: 12px; border-radius: 8px; margin-bottom: 15px;" onchange="calculateAndDraw()">
                     <option value="steel">Сталь обычная</option>
                 </select>
             </div>
@@ -979,100 +1024,107 @@
                 </div>
 
                 <div class="results-section">
-                    <h3 style="color: #1e3c72; margin-bottom: 15px;">📊 Спецификация материалов</h3>
+                    <h3 style="color: #1e3c72; margin-bottom: 20px;">📊 Спецификация материалов</h3>
                     
-                    <!-- Таблица вертикальных труб -->
-                    <table class="summary-table">
-                        <thead>
-                            <tr>
-                                <th colspan="3">📏 Вертикальные трубы (длина <span id="verticalLength">2400</span> мм)</th>
-                            </tr>
-                            <tr>
-                                <th>Тип</th>
-                                <th>Количество</th>
-                                <th>Стоимость</th>
-                            </tr>
-                        </thead>
-                        <tbody id="verticalTubesTable">
-                            <tr>
-                                <td>Угловые трубы</td>
-                                <td id="cornerCount">4 шт</td>
-                                <td id="cornerCost">0 ₽</td>
-                            </tr>
-                            <tr>
-                                <td>Внутренние трубы</td>
-                                <td id="innerCount">0 шт</td>
-                                <td id="innerCost">0 ₽</td>
-                            </tr>
-                            <tr class="total-row">
-                                <td>Итого вертикальные</td>
-                                <td id="totalVerticalCount">0 шт</td>
-                                <td id="totalVerticalCost">0 ₽</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <!-- Таблицы для десктопа -->
+                    <div class="summary-table desktop-only">
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">📏 Вертикальные трубы (длина <span id="verticalLength">2400</span> мм)</th>
+                                </tr>
+                                <tr>
+                                    <th>Тип</th>
+                                    <th>Количество</th>
+                                    <th>Стоимость</th>
+                                </tr>
+                            </thead>
+                            <tbody id="verticalTubesTable">
+                                <tr>
+                                    <td>Угловые трубы</td>
+                                    <td id="cornerCount">4 шт</td>
+                                    <td id="cornerCost">0 ₽</td>
+                                </tr>
+                                <tr>
+                                    <td>Внутренние трубы</td>
+                                    <td id="innerCount">0 шт</td>
+                                    <td id="innerCost">0 ₽</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Итого вертикальные</td>
+                                    <td id="totalVerticalCount">0 шт</td>
+                                    <td id="totalVerticalCost">0 ₽</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <!-- Таблица горизонтальных труб -->
-                    <table class="summary-table">
-                        <thead>
-                            <tr>
-                                <th colspan="3">📐 Горизонтальные трубы</th>
-                            </tr>
-                            <tr>
-                                <th>Тип</th>
-                                <th>Количество</th>
-                                <th>Стоимость</th>
-                            </tr>
-                        </thead>
-                        <tbody id="horizontalTubesTable">
-                            <tr>
-                                <td>Трубы по ширине</td>
-                                <td id="widthCount">0 шт</td>
-                                <td id="widthCost">0 ₽</td>
-                            </tr>
-                            <tr>
-                                <td>Трубы по глубине (длина <span id="depthLength">600</span> мм)</td>
-                                <td id="depthCount">0 шт</td>
-                                <td id="depthCost">0 ₽</td>
-                            </tr>
-                            <tr class="total-row">
-                                <td>Итого горизонтальные</td>
-                                <td id="totalHorizontalCount">0 шт</td>
-                                <td id="totalHorizontalCost">0 ₽</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="summary-table desktop-only">
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">📐 Горизонтальные трубы</th>
+                                </tr>
+                                <tr>
+                                    <th>Тип</th>
+                                    <th>Количество</th>
+                                    <th>Стоимость</th>
+                                </tr>
+                            </thead>
+                            <tbody id="horizontalTubesTable">
+                                <tr>
+                                    <td>Трубы по ширине</td>
+                                    <td id="widthCount">0 шт</td>
+                                    <td id="widthCost">0 ₽</td>
+                                </tr>
+                                <tr>
+                                    <td>Трубы по глубине (длина <span id="depthLength">600</span> мм)</td>
+                                    <td id="depthCount">0 шт</td>
+                                    <td id="depthCost">0 ₽</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Итого горизонтальные</td>
+                                    <td id="totalHorizontalCount">0 шт</td>
+                                    <td id="totalHorizontalCost">0 ₽</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <!-- Таблица соединительных элементов -->
-                    <table class="summary-table">
-                        <thead>
-                            <tr>
-                                <th colspan="3">🔩 Соединительные элементы</th>
-                            </tr>
-                            <tr>
-                                <th>Тип</th>
-                                <th>Количество</th>
-                                <th>Стоимость</th>
-                            </tr>
-                        </thead>
-                        <tbody id="connectorsTable">
-                            <tr>
-                                <td>ST-4 - Угловые полочные</td>
-                                <td id="st4Count">0 шт</td>
-                                <td id="st4Cost">0 ₽</td>
-                            </tr>
-                            <tr>
-                                <td>ST-2 - Т-образные</td>
-                                <td id="st2Count">0 шт</td>
-                                <td id="st2Cost">0 ₽</td>
-                            </tr>
-                            <tr class="total-row">
-                                <td>Итого соединители</td>
-                                <td id="totalConnectorsCount">0 шт</td>
-                                <td id="totalConnectorsCost">0 ₽</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="summary-table desktop-only">
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">🔩 Соединительные элементы</th>
+                                </tr>
+                                <tr>
+                                    <th>Тип</th>
+                                    <th>Количество</th>
+                                    <th>Стоимость</th>
+                                </tr>
+                            </thead>
+                            <tbody id="connectorsTable">
+                                <tr>
+                                    <td>ST-4 - Угловые полочные</td>
+                                    <td id="st4Count">0 шт</td>
+                                    <td id="st4Cost">0 ₽</td>
+                                </tr>
+                                <tr>
+                                    <td>ST-2 - Т-образные</td>
+                                    <td id="st2Count">0 шт</td>
+                                    <td id="st2Cost">0 ₽</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Итого соединители</td>
+                                    <td id="totalConnectorsCount">0 шт</td>
+                                    <td id="totalConnectorsCost">0 ₽</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Карточки для мобильных устройств -->
+                    <div class="mobile-cards" id="mobileCards"></div>
 
                     <!-- Итоговая стоимость -->
                     <div class="total-cost">
@@ -1356,6 +1408,7 @@
             const connectorsCost = st4Cost + st2Cost;
             const totalCost = Math.round(tubeCost + connectorsCost);
 
+            // Обновляем десктопные таблицы
             document.getElementById('verticalLength').textContent = totalHeight;
             document.getElementById('depthLength').textContent = totalDepth;
 
@@ -1382,6 +1435,59 @@
 
             document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
 
+            // Создаем мобильные карточки
+            const mobileCards = document.getElementById('mobileCards');
+            mobileCards.innerHTML = `
+                <div class="mobile-card">
+                    <h4>📏 Вертикальные трубы (длина ${totalHeight} мм)</h4>
+                    <div class="mobile-card-row">
+                        <span class="label">Угловые трубы:</span>
+                        <span class="value">${cornerCount} шт - ${cornerCost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-row">
+                        <span class="label">Внутренние трубы:</span>
+                        <span class="value">${innerTubes} шт - ${innerCost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-total">
+                        <span class="total-label">Итого вертикальные:</span>
+                        <span>${(cornerCount + innerTubes)} шт - ${(cornerCost + innerCost).toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                </div>
+                
+                <div class="mobile-card">
+                    <h4>📐 Горизонтальные трубы</h4>
+                    <div class="mobile-card-row">
+                        <span class="label">Трубы по ширине:</span>
+                        <span class="value">${widthTubeCount} шт - ${widthCost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-row">
+                        <span class="label">Трубы по глубине (${totalDepth} мм):</span>
+                        <span class="value">${depthTubeCount} шт - ${depthCost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-total">
+                        <span class="total-label">Итого горизонтальные:</span>
+                        <span>${(widthTubeCount + depthTubeCount)} шт - ${(widthCost + depthCost).toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                </div>
+                
+                <div class="mobile-card">
+                    <h4>🔩 Соединительные элементы</h4>
+                    <div class="mobile-card-row">
+                        <span class="label">ST-4 - Угловые полочные:</span>
+                        <span class="value">${st4Count} шт - ${st4Cost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-row">
+                        <span class="label">ST-2 - Т-образные:</span>
+                        <span class="value">${st2Count} шт - ${st2Cost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="mobile-card-total">
+                        <span class="total-label">Итого соединители:</span>
+                        <span>${(st4Count + st2Count)} шт - ${connectorsCost.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                </div>
+            `;
+
+            // Информационная панель
             document.getElementById('dimensionsPanel').innerHTML = `
                 <div><span>📏</span> ${totalWidth}×${totalDepth}×${totalHeight} мм</div>
                 <div><span>📐</span> Секций: ${sections.length}</div>
