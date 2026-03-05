@@ -915,10 +915,10 @@
             const tubeCost = totalTubeLength * profileInfo.pricePerM;
 
             // Правильный расчет соединителей:
-            // ST-4: для угловых труб - по 2 на каждую полку (передние левая и правая)
-            // ST-2: для внутренних труб - по 2 на каждую полку (передние левая и правая внутренние)
-            const st4Count = sortedShelves.length * 2; // 4 полки × 2 = 8 шт
-            const st2Count = sortedShelves.length * 2; // 4 полки × 2 = 8 шт (если есть внутренние трубы)
+            // ST-4: для угловых труб - по 4 на каждую полку (2 спереди + 2 сзади)
+            // ST-2: для внутренних труб - по 4 на каждую полку (2 спереди + 2 сзади)
+            const st4Count = sortedShelves.length * 4; // 4 полки × 4 = 16 шт
+            const st2Count = sortedShelves.length * 4; // 4 полки × 4 = 16 шт (если есть внутренние трубы)
 
             // Стоимость соединителей
             const connectorsCost = 
@@ -1137,15 +1137,20 @@
                     }
                 }
 
-                // Соединители ST-4 на угловых трубах (только передние)
+                // Соединители ST-4 на угловых трубах (передние и задние)
                 drawConnector(offsetX, shelfY, 'st4', 8);
                 drawConnector(offsetX + width * scale, shelfY, 'st4', 8);
+                drawConnector(offsetX - backOffset, shelfYBack, 'st4', 7);
+                drawConnector(offsetX + width * scale - backOffset, shelfYBack, 'st4', 7);
 
-                // Соединители ST-2 на внутренних трубах (только передние)
+                // Соединители ST-2 на внутренних трубах (передние и задние)
                 if (sections.length > 0) {
                     sections.forEach((section, secIdx) => {
                         const xInner = offsetX + (width * scale / (sections.length + 1)) * (secIdx + 1);
                         drawConnector(xInner, shelfY, 'st2', 7);
+                        
+                        const xInnerBack = xInner - backOffset;
+                        drawConnector(xInnerBack, shelfYBack, 'st2', 6);
                     });
                 }
 
