@@ -891,10 +891,10 @@
             const cornerCount = 4; // Угловые трубы У-1...У-4
             const innerCount = innerTubes; // Внутренние трубы В-1...В-n и их задние
             
-            // Широтные трубы Ш (по ширине секций): (секций+1) передних + (секций+1) задних для каждой полки
+            // Трубы Ш по ширине секций: (секций+1) передних + (секций+1) задних для каждой полки
             const widthTubeCount = sortedShelves.length * (sections.length + 1) * 2;
             
-            // Глубинные трубы Г (по глубине): 2 передние + 2 задние для каждой полки
+            // Трубы Г по глубине: 2 передние + 2 задние для каждой полки
             const depthTubeCount = sortedShelves.length * 4;
 
             // Длины труб
@@ -966,13 +966,13 @@
                 <div class="cutting-section">
                     <h5>📐 Горизонтальные трубы</h5>
                     <div class="cutting-item horizontal-sh">
-                        <div class="title">Широтные трубы (серые) - по ширине секций</div>
+                        <div class="title">Трубы по ширине секций (серые)</div>
                         <div class="detail-row"><span>Длина ${sectionWidth} мм - ${widthTubeCount} шт</span></div>
                         <div class="total-row"><span>Всего:</span> <span>${(sectionWidth * widthTubeCount / 1000).toFixed(1)} м</span></div>
                         <div class="detail-row" style="color:#27ae60;"><span>Стоимость:</span> <span>${Math.round(sectionWidth * widthTubeCount / 1000 * profileInfo.pricePerM)} ₽</span></div>
                     </div>
                     <div class="cutting-item horizontal-g">
-                        <div class="title">Глубинные трубы (оранжевые) - по глубине</div>
+                        <div class="title">Трубы по глубине (оранжевые)</div>
                         <div class="detail-row"><span>Длина ${totalDepth} мм - ${depthTubeCount} шт</span></div>
                         <div class="total-row"><span>Всего:</span> <span>${(totalDepth * depthTubeCount / 1000).toFixed(1)} м</span></div>
                         <div class="detail-row" style="color:#27ae60;"><span>Стоимость:</span> <span>${Math.round(totalDepth * depthTubeCount / 1000 * profileInfo.pricePerM)} ₽</span></div>
