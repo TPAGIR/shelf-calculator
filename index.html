@@ -375,11 +375,8 @@
             border-radius: 4px;
         }
 
-        .st1 { background: #e74c3c; }
         .st2 { background: #3498db; }
-        .st3 { background: #2ecc71; }
         .st4 { background: #f39c12; }
-        .st5 { background: #9b59b6; }
         .u-type { background: #1e3c72; }
         .v-type { background: #7f8c8d; }
         .g-type { background: #e67e22; }
@@ -621,15 +618,6 @@
                 </div>
 
                 <div class="connectors-grid">
-                    <div class="connector-card" data-connector="st1" onclick="selectConnector('st1')">
-                        <div class="connector-header">
-                            <div class="connector-icon">ST-1</div>
-                            <div>
-                                <div style="font-size:12px;">Крестообразный</div>
-                                <div class="connector-price">380 ₽</div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="connector-card" data-connector="st2" onclick="selectConnector('st2')">
                         <div class="connector-header">
                             <div class="connector-icon">ST-2</div>
@@ -639,30 +627,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="connector-card" data-connector="st3" onclick="selectConnector('st3')">
-                        <div class="connector-header">
-                            <div class="connector-icon">ST-3</div>
-                            <div>
-                                <div style="font-size:12px;">Лучевой</div>
-                                <div class="connector-price">250 ₽</div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="connector-card selected" data-connector="st4" onclick="selectConnector('st4')">
                         <div class="connector-header">
                             <div class="connector-icon">ST-4</div>
                             <div>
                                 <div style="font-size:12px;">Угловой полочный</div>
                                 <div class="connector-price">280 ₽</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="connector-card" data-connector="st5" onclick="selectConnector('st5')">
-                        <div class="connector-header">
-                            <div class="connector-icon">ST-5</div>
-                            <div>
-                                <div style="font-size:12px;">Т-разветвитель</div>
-                                <div class="connector-price">220 ₽</div>
                             </div>
                         </div>
                     </div>
@@ -686,12 +656,12 @@
 
                     <div class="legend-section">
                         <div class="legend-grid">
-                            <div class="legend-item"><span class="legend-color st2"></span> ST-2: В-трубы</div>
-                            <div class="legend-item"><span class="legend-color st4"></span> ST-4: У-трубы</div>
-                            <div class="legend-item"><span class="legend-color u-type"></span> Угловые трубы</div>
-                            <div class="legend-item"><span class="legend-color v-type"></span> Внутренние трубы</div>
-                            <div class="legend-item"><span class="legend-color g-type"></span> Глубинные трубы (Г)</div>
-                            <div class="legend-item"><span class="legend-color sh-type"></span> Широтные трубы (Ш)</div>
+                            <div class="legend-item"><span class="legend-color st2"></span> ST-2: В-трубы (внутренние)</div>
+                            <div class="legend-item"><span class="legend-color st4"></span> ST-4: У-трубы (угловые)</div>
+                            <div class="legend-item"><span class="legend-color u-type"></span> Угловые трубы (синие)</div>
+                            <div class="legend-item"><span class="legend-color v-type"></span> Внутренние трубы (серые)</div>
+                            <div class="legend-item"><span class="legend-color g-type"></span> Глубинные трубы Г (оранжевые)</div>
+                            <div class="legend-item"><span class="legend-color sh-type"></span> Широтные трубы Ш (серые)</div>
                         </div>
                     </div>
                 </div>
@@ -739,11 +709,8 @@
 
     <script>
         const connectors = {
-            st1: { name: 'ST-1', price: 380, color: '#e74c3c', used: false },
             st2: { name: 'ST-2', price: 320, color: '#3498db', used: false },
-            st3: { name: 'ST-3', price: 250, color: '#2ecc71', used: false },
-            st4: { name: 'ST-4', price: 280, color: '#f39c12', used: false },
-            st5: { name: 'ST-5', price: 220, color: '#9b59b6', used: false }
+            st4: { name: 'ST-4', price: 280, color: '#f39c12', used: false }
         };
 
         const profileData = {
@@ -947,15 +914,15 @@
             const totalWeight = (totalTubeLength * profileInfo.weight).toFixed(1);
             const tubeCost = totalTubeLength * profileInfo.pricePerM;
 
-            // Расчет соединителей (только используемые)
-            // ST-1 не используется в данной конфигурации
-            const st2Count = shelves.length * innerTubes * 2; // Для внутренних труб - используются
-            const st4Count = shelves.length * 8; // Для угловых труб (передние и задние) - используются
-            // ST-3 и ST-5 не используются
+            // Правильный расчет соединителей:
+            // ST-4: для угловых труб - по 2 на каждую полку (передние левая и правая)
+            // ST-2: для внутренних труб - по 2 на каждую полку (передние левая и правая внутренние)
+            const st4Count = sortedShelves.length * 2; // 4 полки × 2 = 8 шт
+            const st2Count = sortedShelves.length * 2; // 4 полки × 2 = 8 шт (если есть внутренние трубы)
 
-            // Стоимость соединителей (только используемые)
+            // Стоимость соединителей
             const connectorsCost = 
-                (innerTubes > 0 ? st2Count * connectors.st2.price : 0) +
+                st2Count * connectors.st2.price +
                 st4Count * connectors.st4.price;
 
             const totalCost = Math.round(tubeCost + connectorsCost);
@@ -1020,17 +987,14 @@
             // Обновляем итоговую сумму по трубам
             document.getElementById('tubesTotalAmount').textContent = tubesTotalCost.toLocaleString('ru-RU') + ' ₽';
 
-            // Детализация соединителей (только используемые)
+            // Детализация соединителей
             const connectorsDetail = document.getElementById('connectorsDetail');
             connectorsDetail.innerHTML = '';
             
-            const connItems = [];
-            if (st2Count > 0 && innerTubes > 0) {
-                connItems.push({ name: 'ST-2', count: st2Count, price: connectors.st2.price, desc: 'Т-образные - для внутренних труб' });
-            }
-            if (st4Count > 0) {
-                connItems.push({ name: 'ST-4', count: st4Count, price: connectors.st4.price, desc: 'Угловые полочные - для угловых труб' });
-            }
+            const connItems = [
+                { name: 'ST-4', count: st4Count, price: connectors.st4.price, desc: 'Угловые полочные - для угловых труб' },
+                { name: 'ST-2', count: st2Count, price: connectors.st2.price, desc: 'Т-образные - для внутренних труб' }
+            ];
             
             connItems.forEach(conn => {
                 const el = document.createElement('div');
@@ -1043,22 +1007,18 @@
             });
             
             // Добавляем итоговую сумму соединителей
-            if (connItems.length > 0) {
-                const totalConnectorsEl = document.createElement('div');
-                totalConnectorsEl.className = 'total-row';
-                totalConnectorsEl.style.marginTop = '10px';
-                totalConnectorsEl.style.borderTop = '1px dashed #ccc';
-                totalConnectorsEl.style.paddingTop = '10px';
-                totalConnectorsEl.innerHTML = `
-                    <span>Итого соединители:</span>
-                    <span style="font-weight:700; color:#27ae60;">${connectorsCost} ₽</span>
-                `;
-                connectorsDetail.appendChild(totalConnectorsEl);
-            } else {
-                connectorsDetail.innerHTML = '<div class="connector-row">Нет соединительных элементов</div>';
-            }
+            const totalConnectorsEl = document.createElement('div');
+            totalConnectorsEl.className = 'total-row';
+            totalConnectorsEl.style.marginTop = '10px';
+            totalConnectorsEl.style.borderTop = '1px dashed #ccc';
+            totalConnectorsEl.style.paddingTop = '10px';
+            totalConnectorsEl.innerHTML = `
+                <span>Итого соединители:</span>
+                <span style="font-weight:700; color:#27ae60;">${connectorsCost} ₽</span>
+            `;
+            connectorsDetail.appendChild(totalConnectorsEl);
 
-            // Информационная панель (только первые 3 пункта)
+            // Информационная панель
             document.getElementById('dimensionsPanel').innerHTML = `
                 <div><span>📏</span> ${totalWidth}×${totalDepth}×${totalHeight} мм</div>
                 <div><span>📐</span> Секций: ${sections.length + 1}</div>
@@ -1177,20 +1137,15 @@
                     }
                 }
 
-                // Соединители ST-4 на угловых трубах
+                // Соединители ST-4 на угловых трубах (только передние)
                 drawConnector(offsetX, shelfY, 'st4', 8);
                 drawConnector(offsetX + width * scale, shelfY, 'st4', 8);
-                drawConnector(offsetX - backOffset, shelfYBack, 'st4', 7);
-                drawConnector(offsetX + width * scale - backOffset, shelfYBack, 'st4', 7);
 
-                // Соединители ST-2 на внутренних трубах (только если есть внутренние трубы)
+                // Соединители ST-2 на внутренних трубах (только передние)
                 if (sections.length > 0) {
                     sections.forEach((section, secIdx) => {
                         const xInner = offsetX + (width * scale / (sections.length + 1)) * (secIdx + 1);
                         drawConnector(xInner, shelfY, 'st2', 7);
-                        
-                        const xInnerBack = xInner - backOffset;
-                        drawConnector(xInnerBack, shelfYBack, 'st2', 6);
                     });
                 }
 
