@@ -202,15 +202,15 @@
             background: #f0f4f8;
         }
 
-        /* Левая панель */
+        /* Левая панель - увеличена высота */
         .left-panel {
-            flex: 1.2;
+            flex: 1.3;
             background: white;
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             height: fit-content;
-            max-height: 90vh;
+            max-height: calc(100vh - 120px);
             overflow-y: auto;
             position: sticky;
             top: 20px;
@@ -230,6 +230,7 @@
             border-radius: 10px;
         }
 
+        /* Адаптация для мобильных устройств */
         @media (max-width: 1200px) {
             .main-content {
                 flex-direction: column;
@@ -237,13 +238,108 @@
             .left-panel {
                 position: static;
                 max-height: none;
+                width: 100%;
+            }
+            
+            .section-inputs {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .section-input-group {
+                width: 100%;
+            }
+            
+            .section-input-group input {
+                width: 100%;
+            }
+            
+            .canvas-container {
+                min-height: 400px;
+                padding: 10px;
+            }
+            
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+            
+            .summary-table {
+                font-size: 12px;
+            }
+            
+            .summary-table th,
+            .summary-table td {
+                padding: 8px 5px;
+            }
+            
+            .dimensions-panel {
+                position: static;
+                margin-top: 10px;
+                width: 100%;
+                max-width: 100%;
+                background: #1e3c72;
+            }
+            
+            .legend-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .connectors-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-item {
+                padding: 12px;
+            }
+            
+            .section-inputs {
+                margin-left: 0;
+            }
+            
+            .shelf-item {
+                flex-wrap: wrap;
+            }
+            
+            .shelf-item > div {
+                width: 100%;
+            }
+            
+            .summary-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .legend-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-section {
+                padding: 15px 10px;
             }
         }
 
         .section-title {
             font-size: 18px;
             color: #1e3c72;
-            margin: 15px 0 15px 0;
+            margin: 20px 0 15px 0;
             padding-bottom: 8px;
             border-bottom: 3px solid #2a5298;
             font-weight: 600;
@@ -281,7 +377,7 @@
         }
 
         .sections-container {
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
             padding: 8px;
             background: #f8fafd;
@@ -330,6 +426,7 @@
             display: flex;
             gap: 15px;
             margin-left: 38px;
+            flex-wrap: wrap;
         }
 
         .section-input-group {
@@ -337,6 +434,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            min-width: 150px;
         }
 
         .section-input-group label {
@@ -397,7 +495,7 @@
         }
 
         .shelves-container {
-            max-height: 250px;
+            max-height: 300px;
             overflow-y: auto;
             padding: 8px;
             background: #f8fafd;
@@ -409,11 +507,11 @@
             background: white;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .shelf-number {
@@ -430,12 +528,30 @@
             flex-shrink: 0;
         }
 
-        .shelf-item input {
+        .shelf-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .shelf-content span {
+            font-size: 13px;
+            color: #34495e;
+        }
+
+        .shelf-content input {
             width: 80px;
             padding: 6px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 13px;
+        }
+
+        .shelf-content small {
+            font-size: 11px;
+            color: #7f8c8d;
         }
 
         .shelf-item button {
@@ -457,7 +573,7 @@
             background: #f39c12;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
@@ -526,7 +642,7 @@
 
         /* Правая панель */
         .right-panel {
-            flex: 1.8;
+            flex: 1.7;
         }
 
         .preview-section {
@@ -585,21 +701,12 @@
             margin-right: 5px;
         }
 
-        @media (max-width: 768px) {
-            .dimensions-panel {
-                position: static;
-                margin-top: 10px;
-                width: 100%;
-                max-width: 100%;
-                background: #1e3c72;
-            }
-        }
-
         .legend-section {
             background: white;
             border-radius: 20px;
             padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-x: auto;
         }
 
         .legend-grid {
@@ -636,6 +743,7 @@
             border-radius: 20px;
             padding: 20px;
             margin-top: 20px;
+            overflow-x: auto;
         }
 
         .summary-table {
@@ -645,6 +753,7 @@
             background: #f8fafd;
             border-radius: 10px;
             overflow: hidden;
+            min-width: 600px;
         }
 
         .summary-table th {
@@ -684,6 +793,8 @@
             justify-content: space-between;
             align-items: center;
             font-size: clamp(16px, 4vw, 24px);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .total-cost .amount {
@@ -716,6 +827,9 @@
                 max-width: 100%;
                 height: auto;
                 border: 1px solid #000;
+            }
+            .summary-table {
+                min-width: 100%;
             }
         }
     </style>
@@ -985,7 +1099,7 @@
             '25x25x0.8': { weight: 0.6, pricePerM: 90 }
         };
 
-        let sections = []; // Каждая секция: { number: 1, width: 1000 }
+        let sections = [];
         let shelves = [];
         let selectedConnector = 'st4';
 
@@ -994,9 +1108,9 @@
             document.getElementById('totalDepth').value = 600;
             document.getElementById('totalHeight').value = 2400;
             
-            // Добавляем 2 секции с разной шириной
-            addSectionWithWidth(1000, 1200); // Секция 1 с высотой 1200мм
-            addSectionWithWidth(800, 1000);  // Секция 2 с высотой 1000мм
+            // Добавляем 2 секции
+            addSectionWithWidth(1000, 2400);
+            addSectionWithWidth(800, 2400);
             
             // Добавляем 4 полки
             addShelfWithHeight(2400 - 50); // Верхняя полка
@@ -1033,22 +1147,15 @@
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Собираем данные формы
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
             const city = document.getElementById('city').value;
             const comment = document.getElementById('comment').value;
-            
-            // Получаем данные расчета
             const totalCost = document.getElementById('totalCost').textContent;
             const profileTube = document.getElementById('profileTube').value;
             
-            // Формируем сообщение
-            const message = `Заказ от ${name}\nEmail: ${email}\nТелефон: ${phone}\nГород: ${city}\n\nПараметры стеллажа:\nПрофиль: ${profileTube}\nСекций: ${sections.length}\nПолок: ${shelves.length}\nСтоимость: ${totalCost} ₽\n\nКомментарий: ${comment}`;
-            
             alert('Заказ отправлен! Мы свяжемся с вами в ближайшее время.');
-            
             closeOrderModal();
         });
 
@@ -1057,7 +1164,6 @@
         }
 
         window.addSection = function() {
-            // Добавляем секцию со стандартными параметрами
             sections.push({ 
                 number: sections.length + 1, 
                 width: 1000,
@@ -1187,18 +1293,18 @@
                 el.className = 'shelf-item';
                 el.innerHTML = `
                     <div class="shelf-number">П-${shelf.number}</div>
-                    <div style="flex:1; font-size:13px;">
-                        <div>Полка ${shelf.number}</div>
+                    <div class="shelf-content">
+                        <span>Полка ${shelf.number}</span>
                         <input type="number" value="${shelf.height}" min="0" max="${document.getElementById('totalHeight')?.value || 2400}" step="10" 
-                               onchange="updateShelfHeight(${originalIndex}, this.value)" style="width:80px; padding:4px; margin-top:4px; font-size:12px;">
-                        <span style="font-size:11px; color:#7f8c8d;"> мм</span>
+                               onchange="updateShelfHeight(${originalIndex}, this.value)">
+                        <small>мм</small>
                     </div>
                     <button onclick="removeShelf(${originalIndex})">✕</button>
                 `;
                 container.appendChild(el);
             });
             
-            container.style.maxHeight = Math.min(300, 70 + shelves.length * 70) + 'px';
+            container.style.maxHeight = Math.min(350, 70 + shelves.length * 70) + 'px';
         }
 
         window.selectConnector = function(connectorId) {
@@ -1212,45 +1318,30 @@
             const totalHeight = parseInt(document.getElementById('totalHeight')?.value) || 2400;
             const profileTube = document.getElementById('profileTube')?.value || '30x30x2';
 
-            // Общая ширина - сумма ширин всех секций
             const totalWidth = sections.reduce((sum, section) => sum + section.width, 0);
-            
-            // Количество внутренних труб = (количество секций) * 2
             const innerTubes = sections.length * 2;
-
-            // Сортируем полки по высоте
             const sortedShelves = [...shelves].sort((a, b) => a.height - b.height);
 
-            // Количество труб
-            const cornerCount = 4; // Угловые трубы всегда 4
+            const cornerCount = 4;
             
-            // Трубы по ширине: для каждой секции своя ширина, суммируем
             let totalWidthLength = 0;
             let widthTubeCount = 0;
             
             sections.forEach(section => {
-                // Для каждой полки: передние и задние трубы по ширине этой секции
-                const sectionWidthTubes = sortedShelves.length * 2; // перед + зад
+                const sectionWidthTubes = sortedShelves.length * 2;
                 totalWidthLength += (section.width * sectionWidthTubes) / 1000;
                 widthTubeCount += sectionWidthTubes;
             });
             
-            // Трубы по глубине: не зависят от ширины секций
-            const depthTubeCount = sortedShelves.length * 4; // 2 передние + 2 задние для каждой полки
+            const depthTubeCount = sortedShelves.length * 4;
             const totalDepthLength = (totalDepth * depthTubeCount) / 1000;
-
-            // Вертикальные трубы
             const verticalLength = totalHeight;
             const totalVerticalLength = (verticalLength * (cornerCount + innerTubes)) / 1000;
-
-            // Общая длина всех труб
             const totalTubeLength = totalVerticalLength + totalWidthLength + totalDepthLength;
 
-            // Вес и стоимость труб
             const profileInfo = profileData[profileTube] || { weight: 2.0, pricePerM: 130 };
             const totalWeight = (totalTubeLength * profileInfo.weight).toFixed(1);
             
-            // Стоимость отдельных категорий
             const cornerCost = Math.round(verticalLength * cornerCount / 1000 * profileInfo.pricePerM);
             const innerCost = Math.round(verticalLength * innerTubes / 1000 * profileInfo.pricePerM);
             const widthCost = Math.round(totalWidthLength * profileInfo.pricePerM);
@@ -1258,22 +1349,16 @@
             
             const tubeCost = cornerCost + innerCost + widthCost + depthCost;
 
-            // Расчет соединителей
-            const st4Count = sortedShelves.length * 4; // 4 на каждую полку
-            const st2Count = sortedShelves.length * 4; // 4 на каждую полку
-
-            // Стоимость соединителей
+            const st4Count = sortedShelves.length * 4;
+            const st2Count = sortedShelves.length * 4;
             const st4Cost = st4Count * connectors.st4.price;
             const st2Cost = st2Count * connectors.st2.price;
             const connectorsCost = st4Cost + st2Cost;
-
             const totalCost = Math.round(tubeCost + connectorsCost);
 
-            // Обновляем отображение
             document.getElementById('verticalLength').textContent = totalHeight;
             document.getElementById('depthLength').textContent = totalDepth;
 
-            // Обновляем таблицу вертикальных труб
             document.getElementById('cornerCount').textContent = cornerCount + ' шт';
             document.getElementById('cornerCost').textContent = cornerCost.toLocaleString('ru-RU') + ' ₽';
             document.getElementById('innerCount').textContent = innerTubes + ' шт';
@@ -1281,7 +1366,6 @@
             document.getElementById('totalVerticalCount').textContent = (cornerCount + innerTubes) + ' шт';
             document.getElementById('totalVerticalCost').textContent = (cornerCost + innerCost).toLocaleString('ru-RU') + ' ₽';
 
-            // Обновляем таблицу горизонтальных труб
             document.getElementById('widthCount').textContent = widthTubeCount + ' шт';
             document.getElementById('widthCost').textContent = widthCost.toLocaleString('ru-RU') + ' ₽';
             document.getElementById('depthCount').textContent = depthTubeCount + ' шт';
@@ -1289,7 +1373,6 @@
             document.getElementById('totalHorizontalCount').textContent = (widthTubeCount + depthTubeCount) + ' шт';
             document.getElementById('totalHorizontalCost').textContent = (widthCost + depthCost).toLocaleString('ru-RU') + ' ₽';
 
-            // Обновляем таблицу соединителей
             document.getElementById('st4Count').textContent = st4Count + ' шт';
             document.getElementById('st4Cost').textContent = st4Cost.toLocaleString('ru-RU') + ' ₽';
             document.getElementById('st2Count').textContent = st2Count + ' шт';
@@ -1297,10 +1380,8 @@
             document.getElementById('totalConnectorsCount').textContent = (st4Count + st2Count) + ' шт';
             document.getElementById('totalConnectorsCost').textContent = connectorsCost.toLocaleString('ru-RU') + ' ₽';
 
-            // Обновляем итоговую стоимость
             document.getElementById('totalCost').textContent = totalCost.toLocaleString('ru-RU');
 
-            // Информационная панель
             document.getElementById('dimensionsPanel').innerHTML = `
                 <div><span>📏</span> ${totalWidth}×${totalDepth}×${totalHeight} мм</div>
                 <div><span>📐</span> Секций: ${sections.length}</div>
@@ -1366,13 +1447,12 @@
             drawLabel('У-1', offsetX, offsetY, '#1e3c72', 5, -10);
             drawLabel('У-2', offsetX + width * scale, offsetY, '#1e3c72', -30, -10);
 
-            // Внутренние трубы - для каждой секции своя позиция
+            // Внутренние трубы
             let currentX = offsetX;
             sections.forEach((section, index) => {
                 const sectionWidthPx = section.width * scale;
                 const xPos = currentX + sectionWidthPx;
                 
-                // Рисуем вертикальные трубы на границах секций (кроме последней)
                 if (index < sections.length - 1) {
                     drawTube(xPos, offsetY, xPos, offsetY + height * scale, '#7f8c8d', 4);
                     drawLabel(`В-${index + 1}`, xPos, offsetY, '#7f8c8d', 5, -10);
@@ -1394,15 +1474,15 @@
                 
                 if (shelfY < offsetY || shelfY > offsetY + height * scale) return;
 
-                // Трубы по глубине (оранжевые) - по всей ширине
+                // Трубы по глубине
                 drawTube(offsetX, shelfY, offsetX + width * scale, shelfY, '#e67e22', 3);
                 drawTube(offsetX - backOffset, shelfYBack, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 3);
 
-                // Соединительные трубы между передними и задними угловыми трубами
+                // Соединительные трубы
                 drawTube(offsetX, shelfY, offsetX - backOffset, shelfYBack, '#e67e22', 2.5);
                 drawTube(offsetX + width * scale, shelfY, offsetX + width * scale - backOffset, shelfYBack, '#e67e22', 2.5);
 
-                // Соединительные трубы между передними и задними внутренними трубами
+                // Соединительные трубы между внутренними
                 let currentX = offsetX;
                 sections.forEach((section, secIdx) => {
                     const sectionWidthPx = section.width * scale;
@@ -1417,31 +1497,26 @@
                     currentX += sectionWidthPx;
                 });
 
-                // Трубы по ширине (серые) - для каждой секции своя
+                // Трубы по ширине
                 currentX = offsetX;
                 sections.forEach((section, secIdx) => {
                     const sectionWidthPx = section.width * scale;
                     
-                    // Передняя труба
                     drawTube(currentX, shelfY, currentX + sectionWidthPx, shelfY, '#95a5a6', 2.5);
-                    
-                    // Задняя труба
                     drawTube(currentX - backOffset, shelfYBack, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 2.5);
                     
-                    // Вертикальные соединители между передней и задней
                     drawTube(currentX, shelfY, currentX - backOffset, shelfYBack, '#95a5a6', 1.5, true);
                     drawTube(currentX + sectionWidthPx, shelfY, currentX + sectionWidthPx - backOffset, shelfYBack, '#95a5a6', 1.5, true);
                     
                     currentX += sectionWidthPx;
                 });
 
-                // Соединители ST-4 на угловых трубах
+                // Соединители
                 drawConnector(offsetX, shelfY, 'st4', 8);
                 drawConnector(offsetX + width * scale, shelfY, 'st4', 8);
                 drawConnector(offsetX - backOffset, shelfYBack, 'st4', 7);
                 drawConnector(offsetX + width * scale - backOffset, shelfYBack, 'st4', 7);
 
-                // Соединители ST-2 на внутренних трубах
                 let currentXForConnectors = offsetX;
                 sections.forEach((section, secIdx) => {
                     const sectionWidthPx = section.width * scale;
